@@ -1,1 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="250" viewBox="0 0 1200 250" role="img" aria-labelledby="title"><title id="title">Match-to-insight flow</title><rect width="1200" height="250" rx="28" fill="#111"/><g font-family="Arial, sans-serif" text-anchor="middle" font-weight="700" font-size="24" fill="#F0F0F0"><text x="150" y="125">Live events</text><text x="450" y="125">Structured record</text><text x="750" y="125">Performance metrics</text><text x="1050" y="125">Coaching insights</text></g><g stroke="#3388EE" stroke-width="4" fill="none"><path d="M260 117h130m-18-14 18 14-18 14M560 117h130m-18-14 18 14-18 14M860 117h130m-18-14 18 14-18 14"/></g><g fill="#888" font-family="Arial, sans-serif" text-anchor="middle" font-size="14"><text x="150" y="158">Scores, penalties, time</text><text x="450" y="158">Reviewable match activity</text><text x="750" y="158">Technique and activity patterns</text><text x="1050" y="158">Training focus</text></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="250" viewBox="0 0 1200 250" role="img" aria-labelledby="title desc">
+  <title id="title">Match-to-insight flow</title>
+  <desc id="desc">Live events become structured records, then performance metrics and coaching insights.</desc>
+  <rect width="1200" height="250" rx="28" fill="#111"/>
+  <g stroke="#3388EE" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M255 86H345m-16-14 16 14-16 14"/>
+    <path d="M555 86H645m-16-14 16 14-16 14"/>
+    <path d="M855 86H945m-16-14 16 14-16 14"/>
+  </g>
+  <g font-family="Arial, sans-serif" text-anchor="middle" font-weight="700" font-size="24" fill="#F0F0F0">
+    <text x="150" y="130">Live events</text>
+    <text x="450" y="130">Structured record</text>
+    <text x="750" y="130">Performance metrics</text>
+    <text x="1050" y="130">Coaching insights</text>
+  </g>
+  <g fill="#9AA6B6" font-family="Arial, sans-serif" text-anchor="middle" font-size="14">
+    <text x="150" y="165">Scores, penalties, time</text>
+    <text x="450" y="165">Reviewable match activity</text>
+    <text x="750" y="165">Technique and activity patterns</text>
+    <text x="1050" y="165">Training focus</text>
+  </g>
+</svg>
