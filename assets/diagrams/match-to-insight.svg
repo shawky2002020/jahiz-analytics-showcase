@@ -1,22 +1,57 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="250" viewBox="0 0 1200 250" role="img" aria-labelledby="title desc">
-  <title id="title">Match-to-insight flow</title>
-  <desc id="desc">Live events become structured records, then performance metrics and coaching insights.</desc>
-  <rect width="1200" height="250" rx="28" fill="#111"/>
-  <g stroke="#3388EE" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M255 86H345m-16-14 16 14-16 14"/>
-    <path d="M555 86H645m-16-14 16 14-16 14"/>
-    <path d="M855 86H945m-16-14 16 14-16 14"/>
+  <title id="title">From live events to coaching insights</title>
+  <desc id="desc">A four-stage Jahiz Analytics workflow: live events, structured record, performance metrics, and coaching insights.</desc>
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#171D26"/>
+      <stop offset="1" stop-color="#11161D"/>
+    </linearGradient>
+    <marker id="arrowhead" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L8 4L0 8Z" fill="#4B9BFF"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="250" rx="28" fill="#0E1116"/>
+  <path d="M48 37H1152" stroke="#1E2732" stroke-width="1"/>
+  <text x="48" y="30" fill="#8FA6BF" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700" letter-spacing="2.2">MATCH-TO-INSIGHT WORKFLOW</text>
+
+  <g fill="none" stroke="#4B9BFF" stroke-width="3" stroke-linecap="round" marker-end="url(#arrowhead)" aria-hidden="true">
+    <path d="M294 132H326"/>
+    <path d="M574 132H606"/>
+    <path d="M854 132H886"/>
   </g>
-  <g font-family="Arial, sans-serif" text-anchor="middle" font-weight="700" font-size="24" fill="#F0F0F0">
-    <text x="150" y="130">Live events</text>
-    <text x="450" y="130">Structured record</text>
-    <text x="750" y="130">Performance metrics</text>
-    <text x="1050" y="130">Coaching insights</text>
-  </g>
-  <g fill="#9AA6B6" font-family="Arial, sans-serif" text-anchor="middle" font-size="14">
-    <text x="150" y="165">Scores, penalties, time</text>
-    <text x="450" y="165">Reviewable match activity</text>
-    <text x="750" y="165">Technique and activity patterns</text>
-    <text x="1050" y="165">Training focus</text>
+
+  <g font-family="Segoe UI, sans-serif">
+    <g transform="translate(48 67)">
+      <rect width="246" height="132" rx="16" fill="url(#panel)" stroke="#263240"/>
+      <rect x="18" y="20" width="4" height="24" rx="2" fill="#F15144"/>
+      <text x="34" y="37" fill="#F15144" font-size="12" font-weight="700" letter-spacing="1.6">01 · CAPTURE</text>
+      <text x="18" y="76" fill="#F6F8FB" font-size="21" font-weight="700">Live events</text>
+      <text x="18" y="105" fill="#AAB8C8" font-size="14">Scores, penalties, time</text>
+    </g>
+
+    <g transform="translate(328 67)">
+      <rect width="246" height="132" rx="16" fill="url(#panel)" stroke="#263240"/>
+      <rect x="18" y="20" width="4" height="24" rx="2" fill="#4B9BFF"/>
+      <text x="34" y="37" fill="#4B9BFF" font-size="12" font-weight="700" letter-spacing="1.6">02 · ORGANIZE</text>
+      <text x="18" y="76" fill="#F6F8FB" font-size="21" font-weight="700">Structured record</text>
+      <text x="18" y="105" fill="#AAB8C8" font-size="14">Reviewable match activity</text>
+    </g>
+
+    <g transform="translate(608 67)">
+      <rect width="246" height="132" rx="16" fill="url(#panel)" stroke="#263240"/>
+      <rect x="18" y="20" width="4" height="24" rx="2" fill="#37D383"/>
+      <text x="34" y="37" fill="#37D383" font-size="12" font-weight="700" letter-spacing="1.6">03 · ANALYZE</text>
+      <text x="18" y="76" fill="#F6F8FB" font-size="21" font-weight="700">Performance metrics</text>
+      <text x="18" y="105" fill="#AAB8C8" font-size="14">Technique and activity patterns</text>
+    </g>
+
+    <g transform="translate(888 67)">
+      <rect width="246" height="132" rx="16" fill="url(#panel)" stroke="#263240"/>
+      <rect x="18" y="20" width="4" height="24" rx="2" fill="#F2BE38"/>
+      <text x="34" y="37" fill="#F2BE38" font-size="12" font-weight="700" letter-spacing="1.6">04 · APPLY</text>
+      <text x="18" y="76" fill="#F6F8FB" font-size="21" font-weight="700">Coaching insights</text>
+      <text x="18" y="105" fill="#AAB8C8" font-size="14">Training focus</text>
+    </g>
   </g>
 </svg>
