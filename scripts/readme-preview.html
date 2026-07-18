@@ -12,6 +12,7 @@
     .logo { display: block; width: 128px; margin: 0 auto 18px; }
     h1, p { text-align: center; } h1 { margin: 0; font-size: 56px; line-height: 1.15; } .lede { max-width: 900px; margin: 22px auto 30px; color: #57606a; font-size: 26px; }
     .hero { width: 100%; display: block; margin: 0 auto 30px; } h2 { font-size: 32px; margin: 28px 0 8px; } h2 + p { margin: 0; color: #57606a; text-align: left; }
+    .screens { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 18px; } .screen { overflow: hidden; border: 1px solid #d0d7de; border-radius: 14px; background: #f6f8fa; } .screen img { width: 100%; display: block; } .screen strong, .screen span { display: block; padding: 0 16px; } .screen strong { margin-top: 14px; } .screen span { padding-bottom: 16px; color: #57606a; font-size: 16px; }
     [dir="rtl"] { font-family: "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif; } [dir="rtl"] h2 + p { text-align: right; }
   </style>
 </head>
@@ -24,6 +25,9 @@
     <img class="hero" src="../assets/hero/jahiz-hero.webp" alt="Jahiz Analytics hero" />
     <h2>What is Jahiz Analytics?</h2>
     <p>Structured match tracking and review for coaches and athletes.</p>
+    <h2>Product experience</h2>
+    <p>Real installed-app screens, using privacy-reviewed fictional demo fixtures.</p>
+    <section class="screens"><div class="screen"><img src="../assets/screenshots/coach-home.webp" alt="Coach home screen" /><strong>Coach command center</strong><span>Quick actions and match context.</span></div><div class="screen"><img src="../assets/screenshots/live-match-logging.webp" alt="Live match logging screen" /><strong>Live match logging</strong><span>Focused scoring and event controls.</span></div></section>
   </main>
   <main id="arabic" dir="rtl" hidden>
     <img class="logo" src="../assets/brand/jahiz-logo.png" alt="شعار جاهز للتحليلات" />
@@ -32,6 +36,9 @@
     <img class="hero" src="../assets/hero/jahiz-hero.webp" alt="هوية جاهز للتحليلات" />
     <h2>ما هي جاهز للتحليلات؟</h2>
     <p>تسجيل منظم للمباراة ومراجعة مفيدة للمدرب واللاعب.</p>
+    <h2>التجربة داخل المنتج</h2>
+    <p>شاشات أصلية من التطبيق المثبّت ببيانات تجريبية خيالية مراجعَة للخصوصية.</p>
+    <section class="screens"><div class="screen"><img src="../assets/screenshots/coach-home.webp" alt="واجهة المدرب الرئيسية" /><strong>مركز قيادة المدرب</strong><span>إجراءات سريعة وسياق واضح للمباراة.</span></div><div class="screen"><img src="../assets/screenshots/live-match-logging.webp" alt="واجهة التسجيل المباشر" /><strong>تسجيل المباراة مباشرة</strong><span>عناصر مركّزة للنقاط والأحداث.</span></div></section>
   </main>
   <script>
     if (new URLSearchParams(location.search).get('lang') === 'ar') {
@@ -39,6 +46,8 @@
       document.documentElement.dir = 'rtl';
       document.getElementById('english').hidden = true;
       document.getElementById('arabic').hidden = false;
+      const hero = document.querySelector('#arabic .hero');
+      hero.src = `${hero.getAttribute('src')}?preview=ar`;
     }
   </script>
 </body>

@@ -29,7 +29,26 @@ Jahiz connects **match recording → structured data → performance analytics �
 
 ## Product experience
 
-Publication-ready native screenshots are intentionally withheld from this local draft while a fresh demo-only Android capture set is completed. This repository does not use browser captures, recreated product UI, or screenshots with unverified identities. The planned set will cover home, live match logging, event history, match analytics, player profile, team management, tournaments, and performance overview—only where each screen is safely captured from the installed app.
+These are real installed-app captures, prepared from the product's local fictional demo fixtures. Each image was reviewed at full resolution, re-exported without EXIF/XMP/IPTC/text metadata, and annotated so the demo-only status remains unmistakable. They are not browser captures or recreated product screens.
+
+<table>
+  <tr>
+    <td width="50%"><img src="./assets/screenshots/coach-home.webp" alt="Coach home screen with quick actions, overview, and recent matches" /><br /><strong>Coach command center</strong><br />Quick match logging, athlete management, and tournament entry points.</td>
+    <td width="50%"><img src="./assets/screenshots/live-match-logging.webp" alt="Live karate match logging screen with timer, score controls, and attack classification" /><br /><strong>Live match logging</strong><br />Timer-aware scoring, techniques, missed points, and penalties in a focused two-sided workflow.</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="./assets/screenshots/match-review-history.webp" alt="Match review screen with event timeline and completed score" /><br /><strong>Reviewable event history</strong><br />A structured timeline turns each recorded event into a clear post-match record.</td>
+    <td width="50%"><img src="./assets/screenshots/match-performance-analytics.webp" alt="Match analytics screen with offensive defensive and performance metrics" /><br /><strong>Verified performance views</strong><br />Match-level indicators and technique breakdowns where analytics are available in the current app.</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="./assets/screenshots/athlete-profile-management.webp" alt="Athlete profile details screen" /><br /><strong>Athlete and player profiles</strong><br />Coaches can maintain the contextual profile information used in match and team workflows.</td>
+    <td width="50%"><img src="./assets/screenshots/coach-team-management.webp" alt="Coach team management screen with roster readiness and squad members" /><br /><strong>Coach team management</strong><br />Roster visibility and team-readiness context for verified coach workflows.</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="./assets/screenshots/tournament-workflow.webp" alt="Individual tournament screen with start match action and tournament report state" /><br /><strong>Tournament workflows</strong><br />Individual tournaments and coach team-tournament paths where verified.</td>
+    <td width="50%"><img src="./assets/screenshots/athlete-self-profile.webp" alt="Athlete self profile screen" /><br /><strong>Athlete experience</strong><br />Athletes can view and manage their own profile for personal matches and analytics.</td>
+  </tr>
+</table>
 
 ## Live match tracking
 
@@ -99,7 +118,7 @@ See the recruiter-focused [engineering case study](./docs/ENGINEERING_CASE_STUDY
 
 ## Privacy and ownership
 
-This repository contains demonstration-only material. No user data is stored here; screenshots, when added, will use sanitized fictional fixtures only. Production source code, infrastructure, and private services remain private. Read the [privacy and data-safety note](./docs/PRIVACY_AND_DATA_SAFETY.md).
+This repository contains demonstration-only material. No user data is stored here; the included screens use reviewed fictional fixtures only. Production source code, infrastructure, and private services remain private. Read the [privacy and data-safety note](./docs/PRIVACY_AND_DATA_SAFETY.md).
 
 Jahiz Analytics is an independent sports-technology product developed to modernize karate performance tracking and match analysis. Featured work includes product architecture, cross-platform application engineering, mobile UI/UX, match workflows, analytics presentation, and release preparation.
 

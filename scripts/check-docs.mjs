@@ -54,6 +54,21 @@ for (const file of markdownFiles) {
 
 if (!existsSync(join(root, 'assets', 'hero', 'github-social-preview.png'))) failures.push('Missing GitHub social preview');
 if (!existsSync(join(root, 'assets', 'hero', 'jahiz-hero.webp'))) failures.push('Missing README hero');
+const requiredScreenshots = [
+  'coach-home.webp',
+  'live-match-logging.webp',
+  'match-review-history.webp',
+  'match-performance-analytics.webp',
+  'athlete-profile-management.webp',
+  'coach-team-management.webp',
+  'tournament-workflow.webp',
+  'athlete-self-profile.webp',
+];
+for (const screenshot of requiredScreenshots) {
+  if (!existsSync(join(root, 'assets', 'screenshots', screenshot))) {
+    failures.push(`Missing reviewed product screenshot: ${screenshot}`);
+  }
+}
 if (failures.length) {
   console.error('Documentation quality check failed:');
   for (const failure of failures) console.error(`- ${failure}`);
