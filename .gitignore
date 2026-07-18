@@ -1,0 +1,22 @@
+﻿# Public project files
+.DS_Store
+Thumbs.db
+*.apk
+*.aab
+*.ipa
+*.keystore
+*.jks
+*.mobileprovision
+*.p12
+*.cer
+*.pem
+*.key
+*.log
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+coverage/
+.mobile-demo/
+asset-inventory-private.md

@@ -1,0 +1,8 @@
+{
+  "name": "jahiz-analytics-showcase",
+  "private": true,
+  "description": "Local documentation checks for the Jahiz Analytics product showcase.",
+  "scripts": {
+    "check:docs": "node scripts/check-docs.mjs"
+  }
+}

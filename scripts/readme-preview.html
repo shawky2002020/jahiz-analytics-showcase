@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jahiz README preview</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f6f8fa; color: #24292f; font: 20px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .chrome { height: 86px; padding: 25px 58px; background: #24292f; color: #fff; font-size: 25px; }
+    main { width: 1200px; min-height: 1080px; margin: 34px auto; padding: 40px 74px 70px; border: 1px solid #d0d7de; border-radius: 20px; background: #fff; }
+    .logo { display: block; width: 128px; margin: 0 auto 18px; }
+    h1, p { text-align: center; } h1 { margin: 0; font-size: 56px; line-height: 1.15; } .lede { max-width: 900px; margin: 22px auto 30px; color: #57606a; font-size: 26px; }
+    .hero { width: 100%; display: block; margin: 0 auto 30px; } h2 { font-size: 32px; margin: 28px 0 8px; } h2 + p { margin: 0; color: #57606a; text-align: left; }
+    [dir="rtl"] { font-family: "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif; } [dir="rtl"] h2 + p { text-align: right; }
+  </style>
+</head>
+<body>
+  <div class="chrome">github.com / jahiz-analytics-showcase</div>
+  <main id="english">
+    <img class="logo" src="../assets/brand/jahiz-logo.png" alt="Jahiz Analytics logo" />
+    <h1>Jahiz Analytics — جاهز</h1>
+    <p class="lede">A mobile-first karate performance platform for live match tracking, athlete development, tournament workflows, and actionable analytics.</p>
+    <img class="hero" src="../assets/hero/jahiz-hero.webp" alt="Jahiz Analytics hero" />
+    <h2>What is Jahiz Analytics?</h2>
+    <p>Structured match tracking and review for coaches and athletes.</p>
+  </main>
+  <main id="arabic" dir="rtl" hidden>
+    <img class="logo" src="../assets/brand/jahiz-logo.png" alt="شعار جاهز للتحليلات" />
+    <h1>Jahiz Analytics — جاهز</h1>
+    <p class="lede">منصة متوافقة مع الأجهزة المحمولة لتسجيل مباريات الكاراتيه وتحليل الأداء وإدارة اللاعبين والبطولات.</p>
+    <img class="hero" src="../assets/hero/jahiz-hero.webp" alt="هوية جاهز للتحليلات" />
+    <h2>ما هي جاهز للتحليلات؟</h2>
+    <p>تسجيل منظم للمباراة ومراجعة مفيدة للمدرب واللاعب.</p>
+  </main>
+  <script>
+    if (new URLSearchParams(location.search).get('lang') === 'ar') {
+      document.documentElement.lang = 'ar';
+      document.documentElement.dir = 'rtl';
+      document.getElementById('english').hidden = true;
+      document.getElementById('arabic').hidden = false;
+    }
+  </script>
+</body>
+</html>
