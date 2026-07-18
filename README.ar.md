@@ -78,6 +78,6 @@
 
 لا يحتوي هذا المستودع على بيانات مستخدمين أو كود الإنتاج أو البنية التحتية الخاصة. أي لقطات شاشة تضاف لاحقاً ستكون مبنية على بيانات خيالية ومراجَعة للخصوصية. راجع [سياسة الخصوصية وسلامة البيانات](./docs/PRIVACY_AND_DATA_SAFETY.md).
 
-`[PUBLIC CONTACT TO BE ADDED BEFORE PUBLICATION]`
+[GitHub: @shawky2002020](https://github.com/shawky2002020)
 
 </div>

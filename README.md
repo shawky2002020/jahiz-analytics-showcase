@@ -105,7 +105,7 @@ Jahiz Analytics is an independent sports-technology product developed to moderni
 
 ## Contact
 
-[PUBLIC CONTACT TO BE ADDED BEFORE PUBLICATION]
+GitHub: [@shawky2002020](https://github.com/shawky2002020)
 
 ## Repository notes
 
