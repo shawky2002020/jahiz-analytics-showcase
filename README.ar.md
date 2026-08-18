@@ -9,9 +9,19 @@
 <p dir="rtl" align="center"><strong>من كل مباراة إلى تحسّن قابل للقياس.</strong><br />
 منصة متوافقة مع الأجهزة المحمولة لتسجيل مباريات الكاراتيه وتحليل الأداء وإدارة اللاعبين والبطولات.</p>
 
-<p align="center"><img src="./assets/hero/jahiz-hero.webp" alt="هوية جاهز للتحليلات ومسار تحويل أحداث المباراة إلى معرفة قابلة للتطبيق" width="100%" /></p>
+<p align="center">
+  <a href="https://play.google.com/store/apps/details?id=com.jahiz.analytics" aria-label="حمّل جاهز للتحليلات من Google Play">
+    <img src="./assets/store/google-play.svg" alt="حمّل من Google Play" width="220" />
+  </a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="https://apps.apple.com/us/app/jahiz-analytics/id6788289047" aria-label="حمّل جاهز للتحليلات من App Store">
+    <img src="./assets/store/app-store.svg" alt="حمّل من App Store" width="220" />
+  </a>
+</p>
 
-<p dir="rtl" align="center">متاح الآن على <strong>Google Play</strong> و<strong>App Store</strong>.</p>
+<p dir="rtl" align="center"><strong>متاح الآن على Google Play وApp Store.</strong></p>
+
+<p align="center"><img src="./assets/hero/jahiz-hero.webp" alt="هوية جاهز للتحليلات ومسار تحويل أحداث المباراة إلى معرفة قابلة للتطبيق" width="100%" /></p>
 
 <div dir="rtl">
 
@@ -88,14 +98,6 @@
 **قيد التطوير:** تحسين التجربة عبر المنصات ومواصلة تطوير المنتج.
 
 **التوجه المستقبلي:** تصدير تقارير PDF، ورؤى مولّدة بالذكاء الاصطناعي، وتحليل الفيديو، ودعوات المدرب واللاعب، وحسابات الأكاديميات، ووضع الاتحادات أو المنظمين، والسوق العام، والمشاركة والصلاحيات المتقدمة، وتطبيق الدفع والاشتراكات والحصص بالكامل.
-
-## توفر التطبيق
-
-<p align="center">
-  <a href="https://play.google.com/store/apps/details?id=com.jahiz.analytics"><img src="./assets/store/google-play.svg" alt="حمّل جاهز للتحليلات من Google Play" width="180" /></a>
-  &nbsp;&nbsp;
-  <a href="https://apps.apple.com/us/app/jahiz-analytics/id6788289047"><img src="./assets/store/app-store.svg" alt="حمّل جاهز للتحليلات من App Store" width="180" /></a>
-</p>
 
 ## الخصوصية والتواصل
 
