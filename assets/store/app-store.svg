@@ -1,1 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="360" height="108" viewBox="0 0 360 108" role="img" aria-label="Available on the App Store"><rect width="360" height="108" rx="14" fill="#111" stroke="#444"/><text x="36" y="44" fill="#aaa" font-family="Arial, sans-serif" font-size="16">AVAILABLE ON THE</text><text x="36" y="76" fill="#fff" font-family="Arial, sans-serif" font-size="26" font-weight="700">App Store</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="108" viewBox="0 0 360 108" role="img" aria-label="Download Jahiz Analytics on the App Store">
+  <rect x="1" y="1" width="358" height="106" rx="16" fill="#0B0B0B" stroke="#3A3A3A" stroke-width="2"/>
+  <g aria-hidden="true">
+    <rect x="26" y="24" width="60" height="60" rx="14" fill="#0A84FF"/>
+    <path d="M43 70 L56 38 M56 38 L72 70 M40 63 H75" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="102" y="42" fill="#D6D6D6" font-family="Arial, Helvetica, sans-serif" font-size="15" letter-spacing="0.6">DOWNLOAD ON THE</text>
+  <text x="102" y="76" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="700">App Store</text>
+</svg>
