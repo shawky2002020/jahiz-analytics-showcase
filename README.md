@@ -11,7 +11,7 @@ A mobile-first karate performance platform for live match tracking, athlete deve
 
 <p align="center"><img src="./assets/hero/jahiz-hero.webp" alt="Jahiz Analytics product showcase artwork with the official logo and match-to-insight workflow" width="100%" /></p>
 
-<p align="center">Android: <strong>Closed testing</strong> · iOS: <strong>TestFlight beta</strong> · Public stores: <strong>Coming soon</strong></p>
+<p align="center">Available now on <strong>Google Play</strong> and the <strong>App Store</strong>.</p>
 
 ## What is Jahiz Analytics?
 
@@ -87,7 +87,7 @@ See the recruiter-focused [engineering case study](./docs/ENGINEERING_CASE_STUDY
 
 | Area | Status |
 | --- | --- |
-| Mobile experience | Active development / beta |
+| Mobile experience | Public release / active development |
 | Live match logging | Available |
 | Match review and event history | Available |
 | Performance analytics | Available where verified in the current app |
@@ -95,26 +95,26 @@ See the recruiter-focused [engineering case study](./docs/ENGINEERING_CASE_STUDY
 | Coach team management | Available where verified |
 | Individual tournaments | Available |
 | Team tournaments | Available for coaches where verified |
-| Android release | Closed testing |
-| iOS release | TestFlight beta |
-| Google Play / App Store | Coming soon |
+| Android release | Available on Google Play |
+| iOS release | Available on the App Store |
+| Google Play / App Store | Publicly available |
 | Exports, AI, and video analysis | Roadmap |
 
 ## Roadmap
 
-**Available now:** profile management, live logging, scoring and penalty tracking, match review, verified analytics, and verified tournament workflows.
+**Available now:** public Android and iOS releases, profile management, live logging, scoring and penalty tracking, match review, verified analytics, and verified tournament workflows.
 
-**In progress:** cross-platform beta refinement and release preparation.
+**In progress:** cross-platform refinement and continued product improvements.
 
-**Future direction:** public Android and iOS store release, PDF/report exports, AI-generated insights, video analysis, coach-athlete invitations, organization and academy accounts, federation/official organizer mode, public marketplace, advanced sharing and permissions, and full payment, subscription, and quota enforcement.
+**Future direction:** PDF/report exports, AI-generated insights, video analysis, coach-athlete invitations, organization and academy accounts, federation/official organizer mode, public marketplace, advanced sharing and permissions, and full payment, subscription, and quota enforcement.
 
 ## App availability
 
-<!-- Replace with official store URL after public release -->
-<img src="./assets/store/google-play-coming-soon.svg" alt="Google Play coming soon" width="180" />
-
-<!-- Replace with official store URL after public release -->
-<img src="./assets/store/app-store-coming-soon.svg" alt="App Store coming soon" width="180" />
+<p align="center">
+  <a href="https://play.google.com/store/apps/details?id=com.jahiz.analytics"><img src="./assets/store/google-play.svg" alt="Get Jahiz Analytics on Google Play" width="180" /></a>
+  &nbsp;&nbsp;
+  <a href="https://apps.apple.com/us/app/jahiz-analytics/id6788289047"><img src="./assets/store/app-store.svg" alt="Download Jahiz Analytics on the App Store" width="180" /></a>
+</p>
 
 ## Privacy and ownership
 
