@@ -9,9 +9,19 @@
 <p align="center"><strong>From every match to measurable improvement.</strong><br />
 A mobile-first karate performance platform for live match tracking, athlete development, tournament workflows, and actionable analytics.</p>
 
-<p align="center"><img src="./assets/hero/jahiz-hero.webp" alt="Jahiz Analytics product showcase artwork with the official logo and match-to-insight workflow" width="100%" /></p>
+<p align="center">
+  <a href="https://play.google.com/store/apps/details?id=com.jahiz.analytics" aria-label="Get Jahiz Analytics on Google Play">
+    <img src="./assets/store/google-play.svg" alt="Get it on Google Play" width="220" />
+  </a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="https://apps.apple.com/us/app/jahiz-analytics/id6788289047" aria-label="Download Jahiz Analytics on the App Store">
+    <img src="./assets/store/app-store.svg" alt="Download on the App Store" width="220" />
+  </a>
+</p>
 
-<p align="center">Available now on <strong>Google Play</strong> and the <strong>App Store</strong>.</p>
+<p align="center"><strong>Available now on Google Play and the App Store.</strong></p>
+
+<p align="center"><img src="./assets/hero/jahiz-hero.webp" alt="Jahiz Analytics product showcase artwork with the official logo and match-to-insight workflow" width="100%" /></p>
 
 ## What is Jahiz Analytics?
 
@@ -107,14 +117,6 @@ See the recruiter-focused [engineering case study](./docs/ENGINEERING_CASE_STUDY
 **In progress:** cross-platform refinement and continued product improvements.
 
 **Future direction:** PDF/report exports, AI-generated insights, video analysis, coach-athlete invitations, organization and academy accounts, federation/official organizer mode, public marketplace, advanced sharing and permissions, and full payment, subscription, and quota enforcement.
-
-## App availability
-
-<p align="center">
-  <a href="https://play.google.com/store/apps/details?id=com.jahiz.analytics"><img src="./assets/store/google-play.svg" alt="Get Jahiz Analytics on Google Play" width="180" /></a>
-  &nbsp;&nbsp;
-  <a href="https://apps.apple.com/us/app/jahiz-analytics/id6788289047"><img src="./assets/store/app-store.svg" alt="Download Jahiz Analytics on the App Store" width="180" /></a>
-</p>
 
 ## Privacy and ownership
 
