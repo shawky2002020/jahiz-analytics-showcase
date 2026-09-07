@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 620" width="100%" height="100%" role="img" aria-labelledby="lmf-title lmf-desc">
+  <title id="lmf-title">Live Match State Engine &amp; Command Reconciliation</title>
+  <desc id="lmf-desc">Sequence from operator tap to optimistic NgRx store update, idempotent FIFO queue, database append, server reconciliation, and destructive action undo.</desc>
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b0f19" />
+      <stop offset="100%" stop-color="#030712" />
+    </linearGradient>
+    <linearGradient id="blue2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+    <linearGradient id="red2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f87171" />
+      <stop offset="100%" stop-color="#dc2626" />
+    </linearGradient>
+    <linearGradient id="emerald2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <marker id="ar" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b" />
+    </marker>
+    <marker id="ar-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+    </marker>
+    <marker id="ar-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f87171" />
+    </marker>
+  </defs>
+
+  <rect width="1100" height="620" rx="16" fill="url(#bg2)" stroke="#1e293b" stroke-width="2" />
+
+  <g transform="translate(40, 40)">
+    <text font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" fill="#f8fafc">Live Match State Engine: Command &amp; Reconciliation Sequence</text>
+    <text y="22" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#94a3b8">Zero-latency optimistic interaction with FIFO command serialization, server authority, and undo recovery</text>
+  </g>
+
+  <!-- Columns (Actors) -->
+  <g transform="translate(70, 90)">
+    <rect width="200" height="50" rx="8" fill="#1e293b" stroke="#334155" />
+    <text x="100" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" fill="#f1f5f9" text-anchor="middle">Operator / Scorer UI</text>
+    <line x1="100" y1="50" x2="100" y2="500" stroke="#334155" stroke-dasharray="4,4" />
+  </g>
+
+  <g transform="translate(320, 90)">
+    <rect width="200" height="50" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" />
+    <text x="100" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" fill="#38bdf8" text-anchor="middle">NgRx LiveMatch Store</text>
+    <line x1="100" y1="50" x2="100" y2="500" stroke="#334155" stroke-dasharray="4,4" />
+  </g>
+
+  <g transform="translate(580, 90)">
+    <rect width="200" height="50" rx="8" fill="#1e293b" stroke="#34d399" stroke-width="1.5" />
+    <text x="100" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" fill="#34d399" text-anchor="middle">Node.js Match API</text>
+    <line x1="100" y1="50" x2="100" y2="500" stroke="#334155" stroke-dasharray="4,4" />
+  </g>
+
+  <g transform="translate(830, 90)">
+    <rect width="200" height="50" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5" />
+    <text x="100" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" fill="#f59e0b" text-anchor="middle">PostgreSQL Relational DB</text>
+    <line x1="100" y1="50" x2="100" y2="500" stroke="#334155" stroke-dasharray="4,4" />
+  </g>
+
+  <!-- Step 1: Scorer Action -->
+  <g transform="translate(0, 160)">
+    <path d="M 170 0 L 420 0" stroke="#38bdf8" stroke-width="2" marker-end="url(#ar-blue)" />
+    <rect x="200" y="-18" width="190" height="24" rx="4" fill="#0f172a" stroke="#1e293b" />
+    <text x="295" y="-2" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#f1f5f9" text-anchor="middle">1. Action Tap (Ippon / Penalty / Senshu)</text>
+  </g>
+
+  <!-- Step 2: Optimistic Update in NgRx -->
+  <g transform="translate(420, 200)">
+    <rect x="-10" y="-14" width="220" height="42" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
+    <text x="100" y="4" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#38bdf8" text-anchor="middle">2. Optimistic Reducer Mutation</text>
+    <text x="100" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">UI reflects score instantly (0ms latency)</text>
+  </g>
+
+  <!-- Step 3: FIFO Queue & Dispatch -->
+  <g transform="translate(0, 260)">
+    <path d="M 420 0 L 680 0" stroke="#34d399" stroke-width="2" marker-end="url(#ar)" />
+    <rect x="440" y="-18" width="220" height="24" rx="4" fill="#0f172a" stroke="#1e293b" />
+    <text x="550" y="-2" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#f1f5f9" text-anchor="middle">3. FIFO Dispatch (client_event_id)</text>
+  </g>
+
+  <!-- Step 4: Transaction & Terminal Trigger Check -->
+  <g transform="translate(0, 310)">
+    <path d="M 680 0 L 930 0" stroke="#f59e0b" stroke-width="2" marker-end="url(#ar)" />
+    <rect x="710" y="-18" width="190" height="24" rx="4" fill="#0f172a" stroke="#1e293b" />
+    <text x="805" y="-2" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#f1f5f9" text-anchor="middle">4. Transaction &amp; Terminal Trigger</text>
+  </g>
+
+  <!-- Step 5: Database Commit & Event Appended -->
+  <g transform="translate(930, 350)">
+    <rect x="-10" y="-14" width="180" height="38" rx="6" fill="#0f172a" stroke="#f59e0b" />
+    <text x="80" y="4" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#f59e0b" text-anchor="middle">5. Append match_events</text>
+    <text x="80" y="18" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle">Check idempotency, commit</text>
+  </g>
+
+  <!-- Step 6: Server Ack & Canonical State -->
+  <g transform="translate(0, 410)">
+    <path d="M 930 0 L 420 0" stroke="#34d399" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#ar)" />
+    <rect x="520" y="-18" width="260" height="24" rx="4" fill="#0f172a" stroke="#1e293b" />
+    <text x="650" y="-2" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#34d399" text-anchor="middle">6. Server Ack (200 OK + Authoritative State)</text>
+  </g>
+
+  <!-- Step 7: UI Reconciliation -->
+  <g transform="translate(0, 450)">
+    <path d="M 420 0 L 170 0" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#ar-blue)" />
+    <rect x="210" y="-18" width="170" height="24" rx="4" fill="#0f172a" stroke="#1e293b" />
+    <text x="295" y="-2" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#38bdf8" text-anchor="middle">7. Reconcile &amp; Flush Queue</text>
+  </g>
+
+  <!-- Step 8: Undo Flow -->
+  <g transform="translate(0, 520)">
+    <path d="M 170 0 L 420 0" stroke="#f87171" stroke-width="2" marker-end="url(#ar-red)" />
+    <rect x="210" y="-18" width="180" height="24" rx="4" fill="#0f172a" stroke="#dc2626" />
+    <text x="300" y="-2" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#f87171" text-anchor="middle">Undo Tap: DELETE /event</text>
+
+    <path d="M 420 0 L 930 0" stroke="#f87171" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#ar-red)" />
+    <rect x="550" y="-18" width="240" height="24" rx="4" fill="#0f172a" stroke="#1e293b" />
+    <text x="670" y="-2" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#f87171" text-anchor="middle">Transactional Rollback &amp; Score Recalc</text>
+  </g>
+</svg>
