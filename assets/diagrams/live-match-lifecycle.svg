@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 480" width="100%" height="100%" role="img" aria-labelledby="msl-title msl-desc">
+  <title id="msl-title">Match State Lifecycle &amp; Terminal Enforcement</title>
+  <desc id="msl-desc">State machine showing Draft, In-Progress, Paused, and Terminal Completed state guarded by database triggers.</desc>
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b0f19" />
+      <stop offset="100%" stop-color="#030712" />
+    </linearGradient>
+    <linearGradient id="blue3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+    <linearGradient id="amber3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <linearGradient id="emerald3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <marker id="ar3" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b" />
+    </marker>
+    <marker id="ar3-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+    </marker>
+    <marker id="ar3-emerald" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399" />
+    </marker>
+  </defs>
+
+  <rect width="1100" height="480" rx="16" fill="url(#bg3)" stroke="#1e293b" stroke-width="2" />
+
+  <g transform="translate(40, 40)">
+    <text font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" fill="#f8fafc">Match State Lifecycle &amp; Integrity Invariants</text>
+    <text y="22" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#94a3b8">Deterministic state transitions with PostgreSQL trigger enforcement preventing illegal post-terminal mutations</text>
+  </g>
+
+  <!-- Node 1: DRAFT / SETUP -->
+  <g transform="translate(60, 150)">
+    <rect width="200" height="130" rx="10" fill="#0f172a" stroke="#334155" stroke-width="2" />
+    <rect x="16" y="16" width="6" height="20" rx="3" fill="#64748b" />
+    <text x="30" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" fill="#f1f5f9">DRAFT / SETUP</text>
+    <text x="16" y="60" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">• Athlete selection (AKA/AO)</text>
+    <text x="16" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">• Category &amp; bout duration</text>
+    <text x="16" y="100" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">• Tournament or friendly</text>
+  </g>
+
+  <!-- Transition: Start Match -->
+  <path d="M 260 215 L 380 215" stroke="#38bdf8" stroke-width="2" marker-end="url(#ar3-blue)" />
+  <rect x="275" y="195" width="90" height="20" rx="4" fill="#0f172a" stroke="#1e293b" />
+  <text x="320" y="209" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#38bdf8" text-anchor="middle">START MATCH</text>
+
+  <!-- Node 2: IN_PROGRESS -->
+  <g transform="translate(380, 130)">
+    <rect width="260" height="170" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+    <rect x="16" y="16" width="6" height="20" rx="3" fill="url(#blue3)" />
+    <text x="30" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" fill="#38bdf8">IN_PROGRESS (Live)</text>
+    <text x="16" y="60" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">• Active clock producer (1 Hz)</text>
+    <text x="16" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">• Live scoring: Yuko, Waza-ari, Ippon</text>
+    <text x="16" y="100" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">• Penalties: Chui 1-3, Hansoku</text>
+    <text x="16" y="120" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">• Senshu assignment &amp; override</text>
+    <text x="16" y="140" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">• FIFO command serialization</text>
+  </g>
+
+  <!-- Bi-directional Transition: PAUSE / RESUME -->
+  <path d="M 510 300 C 510 370, 420 370, 420 300" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#ar3)" />
+  <rect x="420" y="360" width="90" height="18" rx="4" fill="#0f172a" stroke="#1e293b" />
+  <text x="465" y="373" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="600" fill="#fbbf24" text-anchor="middle">PAUSE / RESUME</text>
+
+  <!-- Transition: Finalize -->
+  <path d="M 640 215 L 760 215" stroke="#34d399" stroke-width="2" marker-end="url(#ar3-emerald)" />
+  <rect x="660" y="195" width="80" height="20" rx="4" fill="#0f172a" stroke="#1e293b" />
+  <text x="700" y="209" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#34d399" text-anchor="middle">FINALIZE</text>
+
+  <!-- Node 3: COMPLETED (TERMINAL) -->
+  <g transform="translate(760, 130)">
+    <rect width="280" height="170" rx="10" fill="#0f172a" stroke="#059669" stroke-width="2" />
+    <rect x="16" y="16" width="6" height="20" rx="3" fill="url(#emerald3)" />
+    <text x="30" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="700" fill="#34d399">COMPLETED (Terminal)</text>
+    <text x="16" y="60" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">• Clock halted permanently</text>
+    <text x="16" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">• Winner &amp; victory reason fixed</text>
+    <text x="16" y="100" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#f87171">• DB Trigger: Locks row mutations</text>
+    <text x="16" y="120" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#34d399">• Enqueues task into analytics_tasks</text>
+    <text x="16" y="140" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">• Opens canonical review timeline</text>
+  </g>
+
+  <!-- Database Terminal Guard Callout -->
+  <g transform="translate(100, 400)">
+    <rect width="900" height="50" rx="8" fill="#1e293b" stroke="#334155" />
+    <circle cx="28" cy="25" r="8" fill="#dc2626" />
+    <text x="48" y="22" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#f1f5f9">PostgreSQL Terminal Invariant Guard (Migration 011):</text>
+    <text x="48" y="38" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">The database trigger rejects any INSERT/UPDATE/DELETE on match_events once match status = 'COMPLETED', guaranteeing immutable audit trails.</text>
+  </g>
+</svg>
