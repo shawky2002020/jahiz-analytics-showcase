@@ -16,8 +16,8 @@ function walk(directory) {
       const extension = extname(entry.name).toLowerCase();
       if (extension === '.md') markdownFiles.push(path);
       if (textExtensions.has(extension)) scanText(path);
-      if (/\.(png|webp|jpe?g)$/i.test(entry.name) && statSync(path).size > maxAssetBytes) {
-        failures.push(`${relative(root, path)} exceeds 3 MiB`);
+      if (/\.(png|webp|jpe?g|mp4)$/i.test(entry.name) && statSync(path).size > maxAssetBytes) {
+        failures.push(`${relative(root, path)} exceeds 3 MiB (${statSync(path).size} bytes)`);
       }
     }
   }
@@ -52,8 +52,26 @@ for (const file of markdownFiles) {
   for (const match of text.matchAll(/<img[^>]+src=["']([^"']+)["']/gi)) validateTarget(file, match[1]);
 }
 
-if (!existsSync(join(root, 'assets', 'hero', 'github-social-preview.png'))) failures.push('Missing GitHub social preview');
-if (!existsSync(join(root, 'assets', 'hero', 'jahiz-hero.webp'))) failures.push('Missing README hero');
+// Core Hero and Media Validation
+const requiredMedia = [
+  'assets/hero/github-social-preview.png',
+  'assets/hero/jahiz-hero.webp',
+  'assets/hero/jahiz-product-engineering-showcase.webp',
+  'assets/hero/jahiz-engineering-overview.webp',
+  'assets/demo/jahiz-demo-full.mp4',
+  'assets/demo/jahiz-demo-recruiter.mp4',
+  'assets/demo/jahiz-demo-poster.webp',
+  'assets/diagrams/system-architecture.svg',
+  'assets/diagrams/live-match-lifecycle.svg',
+  'assets/diagrams/match-to-analytics.svg',
+  'assets/diagrams/tournament-domain.svg',
+  'assets/diagrams/release-pipeline.svg',
+];
+
+for (const media of requiredMedia) {
+  if (!existsSync(join(root, media))) failures.push(`Missing required showcase media: ${media}`);
+}
+
 const requiredScreenshots = [
   'coach-home.webp',
   'live-match-logging.webp',
@@ -74,4 +92,4 @@ if (failures.length) {
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
-console.log(`Documentation quality check passed (${markdownFiles.length} Markdown files checked).`);
+console.log(`Documentation & media quality check passed (${markdownFiles.length} Markdown files, all assets verified < 3 MiB).`);

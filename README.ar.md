@@ -45,6 +45,12 @@
 
 ---
 
+<p align="center">
+  <img src="./assets/hero/jahiz-product-engineering-showcase.webp" alt="استعراض منتج وهندسة جاهز" width="100%" />
+</p>
+
+---
+
 ## 📊 نظرة هندسية شاملة
 
 | المحور الهندسي | المواصفات الإنتاجية | المبررات المعمارية والتحقق |
@@ -73,11 +79,17 @@
 شاهد التطبيق الميداني الفعلي أثناء العمل، مستعرضاً تسجيل النقاط المباشر، وتزامن المؤقت مع الأحداث، والواجهة التفاؤلية المرنة ضد انقطاع الشبكة، وشاشات التحليلات:
 
 <p align="center">
-  <a href="./assets/demo/jahiz-mobile-demo.mp4">
-    <img src="./assets/hero/jahiz-hero.webp" alt="مشاهدة فيديو استعراض جاهز" width="100%" />
+  <a href="./assets/demo/jahiz-demo-full.mp4">
+    <img src="./assets/demo/jahiz-demo-poster.webp" alt="مشاهدة فيديو استعراض جاهز" width="100%" />
   </a>
   <br />
-  <em>▶️ <a href="./assets/demo/jahiz-mobile-demo.mp4"><strong>اضغط هنا لتحميل ومشاهدة الفيديو التوضيحي بجودة عالية (MP4، بحجم 1.05 ميجابايت)</strong></a></em>
+  <em>▶️ <a href="./assets/demo/jahiz-demo-full.mp4"><strong>استعراض المنتج الكامل (MP4، 59.5 ثانية، 710 كيلوبايت)</strong></a> &nbsp;|&nbsp; ⚡ <a href="./assets/demo/jahiz-demo-recruiter.mp4"><strong>النسخة السريعة لمسؤولي التوظيف (MP4، 28.7 ثانية، 923 كيلوبايت)</strong></a></em>
+</p>
+
+---
+
+<p align="center">
+  <img src="./assets/hero/jahiz-engineering-overview.webp" alt="نظرة شاملة على هندسة نظام جاهز" width="100%" />
 </p>
 
 ---
@@ -126,7 +138,7 @@ jahiz-monorepo/
 - **عمليات حفظ حتمية (Idempotent Upserts)**: تعمل المهام داخل معاملات قاعدة بيانات محكمة (`BEGIN ... COMMIT`) لتحديث الجداول المجمعة `athlete_analytics_cache` و `match_analytics_cache`. إعادة تشغيل المهمة لأي مباراة ينتج نفس البيانات بدقة ودون أي تكرار.
 
 <p align="center">
-  <img src="./assets/diagrams/analytics-pipeline.svg" alt="خط معالجة التحليلات الرياضية وطابور المهام" width="100%" />
+  <img src="./assets/diagrams/match-to-analytics.svg" alt="خط معالجة التحليلات الرياضية وطابور المهام" width="100%" />
 </p>
 
 📖 *اقرأ دراسة الحالة الكاملة: [خط معالجة التحليلات وطابور المهام في PostgreSQL](./docs/case-studies/ANALYTICS_PIPELINE.md)*
@@ -141,7 +153,7 @@ jahiz-monorepo/
 - **تنسيق الأرقام المحلية**: تم بناء أنبوب تحويل مخصص (`ArabicNumbersPipe`) يعرض جميع المؤقتات ونقاط المباريات وجداول البطولات بالأرقام العربية المشرقية عند اختيار اللغة العربية، دون المساس بالقيم الرقمية الخام في الحالة.
 
 <p align="center">
-  <img src="./assets/diagrams/match-state-lifecycle.svg" alt="دورة حياة حالة المباراة والانتقالات" width="100%" />
+  <img src="./assets/diagrams/live-match-lifecycle.svg" alt="دورة حياة حالة المباراة والانتقالات" width="100%" />
 </p>
 
 📖 *اقرأ دراسة الحالة الكاملة: [معمارية تطبيقات الهاتف ونظام التصميم ثنائي الاتجاه](./docs/case-studies/MOBILE_ENGINEERING.md)*
@@ -170,53 +182,55 @@ jahiz-monorepo/
 <table>
   <tr>
     <td width="50%">
-      <img src="./assets/screenshots/coach-home.webp" alt="لوحة تحكم المدرب" /><br />
+      <img src="./assets/screenshots/home/coach-home-en.webp" alt="لوحة تحكم المدرب" /><br />
       <strong>مركز تحكم المدرب</strong><br />
       بدء سريع لتسجيل المباريات، متابعة جاهزية الفريق، وجداول البطولات القادمة.
     </td>
     <td width="50%">
-      <img src="./assets/screenshots/live-match-logging.webp" alt="تسجيل المباراة المباشرة" /><br />
+      <img src="./assets/screenshots/live-match/live-match-running-timer.webp" alt="تسجيل المباراة المباشرة" /><br />
       <strong>تسجيل أحداث المباراة المباشرة (أكا ضد أو)</strong><br />
       أزرار تسجيل النقاط في أجزاء من الثانية، تصنيف الضربات، واحتساب الإنذارات.
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <img src="./assets/screenshots/match-review-history.webp" alt="مراجعة وسجل أحداث المباراة" /><br />
+      <img src="./assets/screenshots/review/match-review-timeline-events.webp" alt="مراجعة وسجل أحداث المباراة" /><br />
       <strong>سجل زمني مفصل للمباراة</strong><br />
       شريط زمني يوثق كل نقطة وإنذار، وأفضلية السينشو، مع دعم كامل لخاصية التراجع.
     </td>
     <td width="50%">
-      <img src="./assets/screenshots/match-performance-analytics.webp" alt="شاشة التحليلات الفنية" /><br />
+      <img src="./assets/screenshots/analytics/match-technique-radar.webp" alt="شاشة التحليلات الفنية" /><br />
       <strong>عرض التحليلات الفنية للأداء</strong><br />
       مخططات رادارية للهجوم والدفاع، فاعلية الضربات حسب النوع، وتوزيع الإنذارات.
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <img src="./assets/screenshots/coach-team-management.webp" alt="إدارة الفريق للمدرب" /><br />
+      <img src="./assets/screenshots/teams/team-roster-management.webp" alt="إدارة الفريق للمدرب" /><br />
       <strong>إدارة قوائم وأفواج اللاعبين</strong><br />
       متابعة أوزان اللاعبين، الفئات العمرية، وحالة الجاهزية الفنية للبطولات.
     </td>
     <td width="50%">
-      <img src="./assets/screenshots/athlete-profile-management.webp" alt="الملف الفني للاعب" /><br />
+      <img src="./assets/screenshots/athletes/athlete-profile-coach.webp" alt="الملف الفني للاعب" /><br />
       <strong>الملف التفصيلي للاعب</strong><br />
       السجل التاريخي للاعب، إجمالي الميداليات، والسمات الفنية المسجلة.
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <img src="./assets/screenshots/tournament-workflow.webp" alt="إدارة مسارات البطولات" /><br />
+      <img src="./assets/screenshots/tournaments/tournament-hub-individual.webp" alt="إدارة مسارات البطولات" /><br />
       <strong>إدارة وتوثيق البطولات</strong><br />
       أدوار خروج المغلوب، توجيه المباريات، وإصدار تقارير البطولة المجمعة.
     </td>
     <td width="50%">
-      <img src="./assets/screenshots/athlete-self-profile.webp" alt="الملف الشخصي للاعب" /><br />
+      <img src="./assets/screenshots/athletes/athlete-self-profile.webp" alt="الملف الشخصي للاعب" /><br />
       <strong>شاشة الخدمة الذاتية للاعب</strong><br />
       ملخص أداء اللاعب الشخصي، المباريات القادمة، ومسار تطور الضربات والنقاط.
     </td>
   </tr>
 </table>
+
+📖 *تصفح معرض الشاشات الكامل (64 شاشة): [معرض شاشات المنتج](./docs/PRODUCT_SCREEN_GALLERY.md) و [فهرس لقطات الشاشة](./docs/SCREENSHOT_INDEX.md)*
 
 ---
 
@@ -251,7 +265,7 @@ jahiz-monorepo/
 تم بناء مخطط قاعدة البيانات على معايير صارمة في تكامل البيانات وقابلية التدقيق:
 
 <p align="center">
-  <img src="./assets/diagrams/domain-model.svg" alt="نموذج البيانات العلائقي لنظام جاهز" width="100%" />
+  <img src="./assets/diagrams/tournament-domain.svg" alt="نموذج البيانات العلائقي لنظام جاهز" width="100%" />
 </p>
 
 ---
@@ -287,6 +301,11 @@ jahiz-monorepo/
 | 📈 [**دراسة حالة: خط معالجة التحليلات**](./docs/case-studies/ANALYTICS_PIPELINE.md) | كبار مهندسي الخلفية والبيانات | طابور PostgreSQL (`SKIP LOCKED`)، التجميع الحتمي، والتخزين المؤقت. |
 | 📱 [**دراسة حالة: هندسة تطبيقات الهاتف**](./docs/case-studies/MOBILE_ENGINEERING.md) | مهندسو الهاتف وواجهات الاستخدام | جسور Capacitor 7، سمات Ionic 8، ودعم الاتجاهين العربي والإنجليزي. |
 | 🛡️ [**دراسة حالة: موثوقية واستقرار النظام**](./docs/case-studies/RELIABILITY.md) | مهندسو الموثوقية (SRE) | إدارة اتصالات قاعدة البيانات، المعاملات متعددة المراحل، والتعافي من الأخطاء. |
+| 📱 [**حصر شاشات التطبيق والحالات**](./docs/APP_VIEW_INVENTORY.md) | مهندسو الجودة والمنتج | مصفوفة 64 شاشة وحالة مسجلة حسب المسار والصلاحيات والالتقاط. |
+| 📸 [**معرض شاشات المنتج المعماري**](./docs/PRODUCT_SCREEN_GALLERY.md) | مسؤولو التوظيف والمصممون | جولة بصرية منتقاة مصحوبة بتعليقات هندسية عبر 6 محاور رئيسية. |
+| 📂 [**فهرس لقطات الشاشة الشامل**](./docs/SCREENSHOT_INDEX.md) | مراجعو ومطورو المستودع | فهرس شامل لـ 64 لقطة شاشة مع دقة العرض والأحجام والحالات. |
+| 🎬 [**سيناريو الفيديو التوضيحي**](./docs/DEMO_VIDEO_STORYBOARD.md) | منتجو الفيديو والمراجعون | توقيت المشاهد العشرة، النصوص التوضيحية، وتفاعل المستخدم. |
+| 📋 [**بيان سلامة وتكامل الأصول**](./docs/ASSET_MANIFEST.md) | مسؤولو الامتثال والأمان | تتبع كامل للأصول والبيانات التجريبية الآمنة وسجل التحسين. |
 
 ---
 
