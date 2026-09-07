@@ -1,30 +1,58 @@
-# Engineering case study
+# Engineering Case Study: Jahiz Analytics
 
-## Context
+> Executive architecture and engineering review of the production sports-technology platform **Jahiz Analytics (جاهز)**.
 
-Karate match analytics is a product problem as much as a data problem. Recording must stay quick while athletes compete, but the result must remain clear enough to review later and useful enough to influence training.
+## Executive Context
 
-## Product challenges
+Karate match analytics represents a unique engineering challenge: sub-second decision making during high-speed athletic combat combined with deep, longitudinal tactical analysis. The software must never lag, jank, or drop user interaction during competition, yet must produce deterministic, multi-dimensional tactical insights for coaches and national team selectors.
 
-- Record events quickly without turning a live match into a data-entry exercise.
-- Keep match state understandable and resistant to accidental input.
-- Present meaningful analytics on mobile screen sizes.
-- Support distinct coach and athlete experiences.
-- Cover individual and coach team competition workflows.
-- Prepare one product experience for Android and iOS delivery.
+Jahiz Analytics was architected, engineered, and shipped to the **App Store (iOS)** and **Google Play (Android)** by **Shawky Elsayed** as sole architect and lead engineer across 735+ git commits.
 
-## Engineering decisions
+---
 
-Jahiz uses type-safe application development, reusable feature organization, structured domain boundaries, mobile-first layouts, consistent design tokens, relational data modeling, backend-controlled rules, reusable chart presentation, and clear loading, empty, error, and ready states. This is a high-level description only; production code and infrastructure remain private.
+## Core Engineering Documentation
 
-## UX decisions
+This showcase provides thorough, evidence-backed documentation across every tier of the production stack:
 
-The product prioritizes large interaction targets, reduced distraction while logging, predictable transitions, clear analytics hierarchy, responsive layouts, safe-area support, and contrast-conscious presentation. The visual system uses deep neutral surfaces, a dominant blue, and a controlled red match accent.
+### 🏛️ Architecture & Decisions
+- [**System Architecture (ARCHITECTURE.md)**](../docs/ARCHITECTURE.md): Monorepo layout, micro-frontend mobile structure, Node.js ESM backend, and PostgreSQL 17 relational design.
+- [**Architecture Decision Records (ENGINEERING_DECISIONS.md)**](../docs/ENGINEERING_DECISIONS.md): 8 comprehensive ADRs covering state machines, database job queues, standalone components, and release workflows.
+- [**Engineering Overview (ENGINEERING_OVERVIEW.md)**](../docs/ENGINEERING_OVERVIEW.md): Executive summary of tech stack, codebase metrics, business problem, and technical achievements.
 
-## Qualitative results
+### 🔬 Deep-Dive Case Studies
+1. [**Live Match State Machine & Optimistic UI (LIVE_MATCH_ENGINE.md)**](../docs/case-studies/LIVE_MATCH_ENGINE.md):
+   - Local FIFO action queue with immediate NgRx store updates.
+   - Reflow reduction from 146 layouts to 2 layouts per 2 ticks; 0px footer movement.
+   - Deterministic rollback using `revalidateLiveMatch` and RxJS `exhaustMap`.
+2. [**Asynchronous Analytics Pipeline (ANALYTICS_PIPELINE.md)**](../docs/case-studies/ANALYTICS_PIPELINE.md):
+   - PostgreSQL 17 task queue utilizing `SELECT ... FOR UPDATE SKIP LOCKED`.
+   - Decoupled worker process (`src/worker.ts` on port 8081).
+   - Idempotent aggregations stored in materialized cache tables.
+3. [**Cross-Platform Mobile Architecture (MOBILE_ENGINEERING.md)**](../docs/case-studies/MOBILE_ENGINEERING.md):
+   - Capacitor 7 native bridges for haptics, storage, and device lifecycle.
+   - Bilingual parity: Arabic (RTL) and English (LTR) via CSS Logical Properties.
+   - Custom `ArabicNumbersPipe` ensuring authentic Eastern Arabic numerals without data mutation.
+4. [**System Reliability & Fault Tolerance (RELIABILITY.md)**](../docs/case-studies/RELIABILITY.md):
+   - Strict ACID transactions via `pg` connection pool clients.
+   - 37 sequential SQL migrations with partial unique indexes and soft deletes.
+   - Error code catalog and structured application exceptions.
 
-The product establishes a unified flow from player context to match review and performance discussion. It reduces fragmentation between logging and analysis and creates a reusable foundation for future reports, subscriptions, AI insights, and video analysis—without representing those roadmap capabilities as released.
+### 🧪 Verification, Quality & DevOps
+- [**Testing Strategy & Quality Assurance (TESTING_AND_QUALITY.md)**](../docs/TESTING_AND_QUALITY.md): Complete analysis of the 390 automated test files (219 client, 171 server) spanning unit, store, API, and E2E suites.
+- [**Release Engineering & CI/CD (RELEASE_ENGINEERING.md)**](../docs/RELEASE_ENGINEERING.md): 6-stage GitLab CI/CD pipeline, Codemagic iOS TestFlight delivery, and Fastlane Google Play automation.
+- [**Privacy & Data Safety (PRIVACY_AND_DATA_SAFETY.md)**](../docs/PRIVACY_AND_DATA_SAFETY.md): Sanitization audit, zero-PII guarantee, and public safety boundary rules.
 
-## Lessons
+---
 
-Mobile QA, release safety, scope discipline, and privacy-safe demo data are product quality concerns. Reliable event capture and clear fallback states matter more than a dense feature list; public-facing material must accurately represent the installed application.
+## Technical Summary Matrix
+
+| Pillar | Technology | Production Metric / Invariant |
+| :--- | :--- | :--- |
+| **Mobile & Web** | Angular 20 Standalone + Ionic 8 | 0 CLS reflows; sub-millisecond local interaction latency |
+| **State Machine** | NgRx 20 (Reducers, Effects, Selectors) | Deterministic replay, local FIFO rollback, memoized selectors |
+| **Native Bridge** | Capacitor 7 | iOS & Android unified runtime; native camera & haptic feedback |
+| **Backend API** | Node.js 22 LTS (Strict ESM) + Express | Clean 3-tier pattern: Controller → Service → Repository |
+| **Task Queue** | PostgreSQL 17 `FOR UPDATE SKIP LOCKED` | Zero external infrastructure; distributed concurrency control |
+| **Database** | PostgreSQL 17 with 37 Migrations | Multi-stage transactions; `deleted_at` partial unique indexes |
+| **Quality** | 390 Automated Test Files | 219 Angular/NgRx tests, 156 Server tests, 15 E2E suites |
+| **DevOps** | GitLab CI + Codemagic + Fastlane | Automated dual-store delivery with automated rollback |

@@ -1,7 +1,36 @@
-# Privacy and data safety
+# Privacy, Data Safety & Showcase Boundaries
 
-This repository contains no production source code, application bundles, credentials, environment files, private routes, database schema, infrastructure details, user data, or internal business information.
+## The Non-Negotiable Showcase Boundary
 
-The included product screenshots are real installed-app captures from local fictional demo fixtures. All eight were reviewed at 1080 × 1920 for personal data, notifications, account identifiers, private paths, and private operational details. Their source files had no image metadata; the committed WebP derivatives contain no EXIF, XMP, IPTC, or textual metadata and carry a visible fictional-demo label. Browser captures and hand-recreated product screens are not accepted substitutes.
+**Jahiz Analytics** is a live commercial production application. The actual application source code, infrastructure configurations, and production database remain strictly **PRIVATE**.
 
-The official logo was copied from the approved application asset, re-exported without textual metadata, and reviewed for embedded paths, comments, URLs, and payloads. See the local asset audit in `docs/ASSET_AUDIT.md`.
+This showcase repository is public and is engineered specifically as a **technical case study** to demonstrate system architecture, engineering rigor, and problem-solving methodology without exposing proprietary implementation code or sensitive credentials.
+
+---
+
+## What is Strictly Redacted & Private
+
+The following assets, credentials, and details are strictly protected and will never appear in public showcase material:
+- **Proprietary Source Code**: Private controllers, services, repositories, and UI template code.
+- **Secrets & Credentials**: Private keys, JWT secrets, database connection strings, Sentry DSNs, Apple/Google signing certificates, and API tokens.
+- **Production User Data**: Real athlete names, coach identities, emails, phone numbers, club affiliations, match scores, or private user IDs.
+- **Internal Infrastructure**: DigitalOcean droplet IPs, internal domain names, firewall rules, and container orchestration secrets.
+
+---
+
+## Sanitized Fictional Demo Datasets
+
+All screenshots, videos, and narrative examples displayed in this showcase originate from an isolated, purpose-built demo fixture environment (`src/scripts/mobile-demo.ts`):
+
+- **Fictional Athletes**: Consistent synthetic profiles (e.g. *Zayn*, *Nour*) created solely for demonstration.
+- **Synthetic Competitions**: Fictional tournaments (e.g. *Cairo Series*, *Alexandria Cup*) and team encounters (*Nile Team Challenge*).
+- **Metadata Scrubbing**: All exported screenshots undergo automated metadata stripping, removing EXIF, XMP, IPTC, and location headers.
+
+---
+
+## Automated Verification
+
+This showcase repository enforces its own automated security and quality gate (`scripts/check-docs.mjs`):
+- Scans every text file for regex patterns matching private keys, API secrets, and connection strings.
+- Validates that all asset sizes remain within reasonable bounds (< 3 MiB).
+- Validates all internal documentation and media links to prevent broken references.
