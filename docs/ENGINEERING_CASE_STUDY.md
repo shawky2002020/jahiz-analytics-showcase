@@ -1,58 +1,32 @@
-# Engineering Case Study: Jahiz Analytics
+# Engineering case study: Jahiz Analytics
 
-> Executive architecture and engineering review of the production sports-technology platform **Jahiz Analytics (جاهز)**.
+Jahiz Analytics combines a mobile live-scoring surface with transactional match data and post-match analytics. The production implementation is private; this repository documents the public-safe engineering decisions and product evidence.
 
-## Executive Context
+## What makes the system interesting
 
-Karate match analytics represents a unique engineering challenge: sub-second decision making during high-speed athletic combat combined with deep, longitudinal tactical analysis. The software must never lag, jank, or drop user interaction during competition, yet must produce deterministic, multi-dimensional tactical insights for coaches and national team selectors.
+| Problem | Engineering response | Deep dive |
+| --- | --- | --- |
+| A scorer cannot wait on every network round-trip | Optimistic NgRx state + ordered pending commands + server reconciliation | [Live match engine](./case-studies/LIVE_MATCH_ENGINE.md) |
+| Retries must not duplicate match events | Client event identity + backend/database idempotency | [Reliability](./case-studies/RELIABILITY.md) |
+| Analytics should not slow match writes | Background tasks claimed with PostgreSQL `FOR UPDATE SKIP LOCKED` | [Analytics pipeline](./case-studies/ANALYTICS_PIPELINE.md) |
+| Arabic/English and device geometry affect live controls | Direction-aware layout, logical CSS and mobile safe-area ownership | [Mobile engineering](./case-studies/MOBILE_ENGINEERING.md) |
+| Roles and plans must not become the same authorization system | Backend capability policy separated from commercial entitlements | [Engineering decisions](./ENGINEERING_DECISIONS.md) |
+| Schema/client releases evolve at different speeds | Migration preflight, compatibility patterns and mobile version policy | [Release engineering](./RELEASE_ENGINEERING.md) |
 
-Jahiz Analytics was architected, engineered, and shipped to the **App Store (iOS)** and **Google Play (Android)** by **Shawky Elsayed** as sole architect and lead engineer across 735+ git commits.
+## Engineering ownership
 
----
+**Shawky Elsayed — Software Engineer & Equity Partner, Jahiz Analytics**
 
-## Core Engineering Documentation
+Engineering responsibility spans the Angular/Ionic application, NgRx workflows, Node.js APIs, PostgreSQL data flows, analytics processing, testing and cross-platform release operations. Product, business, brand and sport-domain decisions are developed with the wider Jahiz product partners.
 
-This showcase provides thorough, evidence-backed documentation across every tier of the production stack:
+## Evidence index
 
-### 🏛️ Architecture & Decisions
-- [**System Architecture (ARCHITECTURE.md)**](../docs/ARCHITECTURE.md): Monorepo layout, micro-frontend mobile structure, Node.js ESM backend, and PostgreSQL 17 relational design.
-- [**Architecture Decision Records (ENGINEERING_DECISIONS.md)**](../docs/ENGINEERING_DECISIONS.md): 8 comprehensive ADRs covering state machines, database job queues, standalone components, and release workflows.
-- [**Engineering Overview (ENGINEERING_OVERVIEW.md)**](../docs/ENGINEERING_OVERVIEW.md): Executive summary of tech stack, codebase metrics, business problem, and technical achievements.
+- [Engineering overview](./ENGINEERING_OVERVIEW.md)
+- [System architecture](./ARCHITECTURE.md)
+- [Engineering decisions](./ENGINEERING_DECISIONS.md)
+- [Testing and quality](./TESTING_AND_QUALITY.md)
+- [Release engineering](./RELEASE_ENGINEERING.md)
+- [Product screen gallery](./PRODUCT_SCREEN_GALLERY.md)
+- [Feature claim verification](./FEATURE_CLAIM_VERIFICATION.md)
 
-### 🔬 Deep-Dive Case Studies
-1. [**Live Match State Machine & Optimistic UI (LIVE_MATCH_ENGINE.md)**](../docs/case-studies/LIVE_MATCH_ENGINE.md):
-   - Local FIFO action queue with immediate NgRx store updates.
-   - Reflow reduction from 146 layouts to 2 layouts per 2 ticks; 0px footer movement.
-   - Deterministic rollback using `revalidateLiveMatch` and RxJS `exhaustMap`.
-2. [**Asynchronous Analytics Pipeline (ANALYTICS_PIPELINE.md)**](../docs/case-studies/ANALYTICS_PIPELINE.md):
-   - PostgreSQL 17 task queue utilizing `SELECT ... FOR UPDATE SKIP LOCKED`.
-   - Decoupled worker process (`src/worker.ts` on port 8081).
-   - Idempotent aggregations stored in materialized cache tables.
-3. [**Cross-Platform Mobile Architecture (MOBILE_ENGINEERING.md)**](../docs/case-studies/MOBILE_ENGINEERING.md):
-   - Capacitor 7 native bridges for haptics, storage, and device lifecycle.
-   - Bilingual parity: Arabic (RTL) and English (LTR) via CSS Logical Properties.
-   - Custom `ArabicNumbersPipe` ensuring authentic Eastern Arabic numerals without data mutation.
-4. [**System Reliability & Fault Tolerance (RELIABILITY.md)**](../docs/case-studies/RELIABILITY.md):
-   - Strict ACID transactions via `pg` connection pool clients.
-   - 37 sequential SQL migrations with partial unique indexes and soft deletes.
-   - Error code catalog and structured application exceptions.
-
-### 🧪 Verification, Quality & DevOps
-- [**Testing Strategy & Quality Assurance (TESTING_AND_QUALITY.md)**](../docs/TESTING_AND_QUALITY.md): Complete analysis of the 390 automated test files (219 client, 171 server) spanning unit, store, API, and E2E suites.
-- [**Release Engineering & CI/CD (RELEASE_ENGINEERING.md)**](../docs/RELEASE_ENGINEERING.md): 6-stage GitLab CI/CD pipeline, Codemagic iOS TestFlight delivery, and Fastlane Google Play automation.
-- [**Privacy & Data Safety (PRIVACY_AND_DATA_SAFETY.md)**](../docs/PRIVACY_AND_DATA_SAFETY.md): Sanitization audit, zero-PII guarantee, and public safety boundary rules.
-
----
-
-## Technical Summary Matrix
-
-| Pillar | Technology | Production Metric / Invariant |
-| :--- | :--- | :--- |
-| **Mobile & Web** | Angular 20 Standalone + Ionic 8 | 0 CLS reflows; sub-millisecond local interaction latency |
-| **State Machine** | NgRx 20 (Reducers, Effects, Selectors) | Deterministic replay, local FIFO rollback, memoized selectors |
-| **Native Bridge** | Capacitor 7 | iOS & Android unified runtime; native camera & haptic feedback |
-| **Backend API** | Node.js 22 LTS (Strict ESM) + Express | Clean 3-tier pattern: Controller → Service → Repository |
-| **Task Queue** | PostgreSQL 17 `FOR UPDATE SKIP LOCKED` | Zero external infrastructure; distributed concurrency control |
-| **Database** | PostgreSQL 17 with 37 Migrations | Multi-stage transactions; `deleted_at` partial unique indexes |
-| **Quality** | 390 Automated Test Files | 219 Angular/NgRx tests, 156 Server tests, 15 E2E suites |
-| **DevOps** | GitLab CI + Codemagic + Fastlane | Automated dual-store delivery with automated rollback |
+The case study intentionally avoids volatile commit/test/migration totals and unrepeatable latency claims. Architecture and observable product behavior are the proof.

@@ -1,185 +1,153 @@
-# Architectural Decision Records (ADRs)
+# Engineering decisions
 
-This document records the key software engineering decisions made during the design, implementation, and production maintenance of Jahiz Analytics.
+These records use a consistent format: **Problem → Constraint → Decision → Tradeoff → Result**. They describe public-safe engineering intent without turning implementation details into absolute guarantees.
 
----
+## ADR-001 — Server-authoritative match state with optimistic client interaction
 
-## ADR-001: Server-Authoritative State with Optimistic UI & Idempotent FIFO Event Serialization
+**Problem**  
+Live match operators need immediate visual feedback, while the saved match must still obey server-side competition and ownership rules.
 
-### Context
-In competitive karate scoring, operator taps cannot wait 100–300 ms for network round-trips; the UI must respond instantly. However, if client calculations conflict with server competition rules (or if events arrive out of order), corrupted match records result.
+**Constraint**  
+Mobile latency and retries are variable; duplicate taps/retries must not produce duplicate domain effects.
 
-### Constraints
-- Mobile network latency in sports venues fluctuates significantly.
-- Accidental double-taps by operators can record duplicate points.
-- Match events must maintain strict sequential integrity.
+**Decision**  
+Apply the action optimistically in NgRx, serialize pending match commands, attach a client event identifier, persist through the backend, then acknowledge or reconcile against canonical server state.
 
-### Decision
-Implement optimistic local state updates via NgRx reducers coupled with an in-memory FIFO queue. Every command generates a client-side UUID (`client_event_id`). The backend validates uniqueness against PostgreSQL's unique constraint on `(match_id, client_event_id)`. The server responds with canonical match state, against which the client reconciles.
+**Tradeoff**  
+The client must model pending/rejected/revalidated state and rollback/reconciliation behavior.
 
-### Trade-offs
-- Increased complexity in the NgRx store layer to handle reconciliation and rollback of rejected actions.
-- Requires local storage of uncommitted actions until server acknowledgement.
-
-### Result
-Zero perceived UI latency for the operator; mathematically guaranteed event ordering; duplicate network retries safely ignored by the database.
+**Result**  
+Network round-trips are removed from the critical visual-feedback path while the backend remains authoritative.
 
 ---
 
-## ADR-002: PostgreSQL `FOR UPDATE SKIP LOCKED` for Distributed Queue Processing
+## ADR-002 — PostgreSQL task claiming for analytics work
 
-### Context
-Post-match analytics calculations (offensive/defensive ratios, technique distributions, tournament aggregations) require substantial CPU processing. Running these synchronously on the API thread degrades HTTP response times.
+**Problem**  
+Post-match aggregation can be more expensive than recording the match event that triggers it.
 
-### Constraints
-- Introducing an external message broker (RabbitMQ, Kafka, AWS SQS) would increase operational overhead and local setup friction.
-- Multiple worker instances must be able to process jobs concurrently without double-processing.
+**Constraint**  
+The system already depends on PostgreSQL, and introducing a separate broker adds another operational component.
 
-### Decision
-Use PostgreSQL as the message queue via the `analytics_tasks` table. Workers claim tasks using `SELECT ... FOR UPDATE SKIP LOCKED` inside an `UPDATE` statement. A dedicated background worker process (`src/worker.ts`) runs independently of the API server (`src/app.ts`).
+**Decision**  
+Store analytics tasks in PostgreSQL and let workers claim available rows with `FOR UPDATE SKIP LOCKED`.
 
-### Trade-offs
-- Relies on database connection pool capacity.
-- Requires dedicated maintenance logic (stale lease reaper, retry ceilings).
+**Tradeoff**  
+Queue throughput shares database connections/capacity with the transactional system, and worker retry/stale-task behavior must be maintained explicitly.
 
-### Result
-Eliminated third-party infrastructure dependencies; achieved seamless horizontal worker scaling with zero lock contention; decoupled API latency from analytics computation.
+**Result**  
+Analytics work is decoupled from the interactive request path without adding a second queueing product.
 
 ---
 
-## ADR-003: Composite CSS Grid Architecture & Shared Overlay to Eliminate Cumulative Layout Shift (CLS)
+## ADR-003 — Stable live-scorer layout with isolated transient feedback
 
-### Context
-During live scoring, network status notifications ("Offline", "Reconnecting") and mutation error banners previously caused the scorer footer to shift by 25–62 px. This caused operator mis-taps during critical bouts. Furthermore, the animated clock rail caused 146 layout recalculations during two clock ticks.
+**Problem**  
+Network/error feedback and timer updates can move controls during rapid interaction.
 
-### Constraints
-- The UI must accommodate screens from 320 px wide up to full-size tablets, in both LTR and RTL directions.
-- All primary touch targets must strictly maintain the 44×44 CSS px minimum.
+**Constraint**  
+The scorer must work across compact phones, larger devices, and both RTL/LTR directions.
 
-### Decision
-1. Restructure the scorer shell into an explicit CSS Grid with fixed header, content, and footer row tracks.
-2. Place connection feedback and error messages in a shared overlay layer that shares the action row, consuming zero layout height when idle and passing pointer events through.
-3. Replace layout-animating CSS properties (`left`) on the activity rail with compositor-friendly hardware-accelerated `transform`.
+**Decision**  
+Use explicit layout regions for the scorer and render transient status/error feedback in isolated overlays instead of allowing banners to change the action surface geometry.
 
-### Trade-offs
-- Slightly more complex CSS styling and overlay positioning logic.
+**Tradeoff**  
+CSS/layout ownership becomes more deliberate and requires responsive regression testing.
 
-### Result
-Layout shifts during clock ticks dropped from **146 to 2 per 2 seconds**; footer movement on network loss reduced from **25 px to 0 px**; zero operator mis-taps due to shifting controls.
+**Result**  
+Critical controls are designed to remain positionally stable across timer and connectivity state changes.
 
 ---
 
-## ADR-004: Dual-Channel Mobile Version Policy & Mandatory Upgrade Gating
+## ADR-004 — Server-backed mobile version policy
 
-### Context
-As database schemas and API protocols evolve, older mobile application versions in the wild can submit obsolete payloads or experience runtime crashes.
+**Problem**  
+Backend/API/schema behavior can evolve while older mobile builds remain installed.
 
-### Constraints
-- App Store and Google Play review delays make immediate client updates impossible.
-- Non-breaking changes should allow graceful operation, while breaking changes must block outdated clients safely.
+**Constraint**  
+Store review and user update timing are outside the backend deployment cycle.
 
-### Decision
-Implement a database-driven mobile version policy (`027_create_mobile_version_policies.sql`). The client transmits its build version on every handshake. The server responds with status: `UP_TO_DATE`, `UPDATE_AVAILABLE`, or `UPDATE_REQUIRED`. If `UPDATE_REQUIRED`, the client locks the interface and provides direct deep-links to the App Store / Google Play.
+**Decision**  
+Evaluate client build/version against server-managed policy and return states such as supported, update available, or update required.
 
-### Trade-offs
-- Requires maintaining policy tables and updating build numbers in release scripts.
+**Tradeoff**  
+Release operations must maintain compatibility policy alongside application versions.
 
-### Result
-Prevented corrupted data submissions from outdated clients; enabled controlled, backward-compatible API evolution.
-
----
-
-## ADR-005: Decoupling Account Capabilities from Commercial Plans & Usage Ledgers
-
-### Context
-In sports organizations, coaches have fundamentally different workflows (roster management, multi-athlete tracking, team encounters) compared to individual athletes (self-profile, personal history). Conflating role capabilities with billing tiers creates brittle authorization rules scattered across the UI and backend.
-
-### Constraints
-- Commercial billing and subscriptions may be enabled, disabled, or phased in progressively.
-- Athletes must never be able to access coach-managed rosters even under premium tiers.
-
-### Decision
-Establish a strict 3-tier authorization model:
-1. **Account Type** (`COACH` vs `ATHLETE`): Determines immutable capability boundaries.
-2. **Subscription Plan**: Determines scale limits (number of managed athletes, historical retention).
-3. **Usage Ledger**: Records consumed quotas independently of access checks.
-
-### Trade-offs
-- Requires explicit policy checks in domain services rather than simple role checks.
-
-### Result
-Clean separation of concerns; zero privilege escalation between roles; seamless ability to adjust commercial limits without altering domain logic.
+**Result**  
+Backward-compatible changes can remain available while incompatible clients can be guided or gated intentionally.
 
 ---
 
-## ADR-006: Cryptographic Refresh Token Rotation with Concurrency Grace Periods
+## ADR-005 — Account capabilities separated from plans and usage
 
-### Context
-Mobile applications maintain long-lived authenticated sessions. Standard static refresh tokens create significant security exposure if intercepted. However, strict single-use refresh token invalidation causes race conditions on mobile devices when multiple concurrent requests (e.g. app resume triggering parallel dashboard queries) attempt to refresh tokens simultaneously.
+**Problem**  
+Coach and athlete accounts represent different product capabilities; billing tiers should not redefine identity or authorization.
 
-### Constraints
-- Mobile clients frequently issue bursts of parallel API requests on foreground resume.
-- Token theft must be detected and neutralized immediately.
+**Constraint**  
+Pricing/quotas can change independently from domain rules and can be disabled during release phases.
 
-### Decision
-Implement rotating refresh tokens backed by PostgreSQL (`033_expand_refresh_token_rotation.sql`) featuring:
-1. Unique family IDs tracking token lineage.
-2. A cryptographic hash stored in the database.
-3. A **30-second concurrency grace period**: If a used token is submitted within 30 seconds by concurrent requests, the server returns the existing new token pair rather than revoking the session.
-4. Any reuse *after* the grace period triggers immediate revocation of the entire token family (theft detection).
+**Decision**  
+Resolve base capabilities from account type, plan entitlements only inside those capabilities, and usage tracking as a separate concern.
 
-### Trade-offs
-- Additional state tracking and transactional verification on token refresh.
+**Tradeoff**  
+Policy is more explicit than scattered role checks and requires dedicated tests.
 
-### Result
-Zero false-positive logouts during parallel mobile resume requests; robust cryptographic protection against token replay and theft.
+**Result**  
+Commercial changes can evolve without turning an athlete plan into coach access or mixing billing logic into domain identity.
 
 ---
 
-## ADR-007: Relational Domain Modeling with Partial Unique Indexes & Soft Deletes
+## ADR-006 — Refresh-token rotation with mobile concurrency handling
 
-### Context
-Coaches frequently archive or delete athletes and teams, but historical match records referencing those entities must remain fully intact for analytics integrity. Furthermore, coaches often recreate an athlete with the same name after deleting an older record.
+**Problem**  
+Rotating refresh tokens improves session security, but parallel requests during app resume can race.
 
-### Constraints
-- Relational integrity must prevent dangling foreign key references in historical matches.
-- Standard unique constraints on athlete name would prevent recreating an athlete previously deleted.
+**Constraint**  
+A strict single-use token with no concurrency handling can invalidate legitimate parallel refresh attempts.
 
-### Decision
-Implement soft deletes (`deleted_at IS NULL`) across all primary entities coupled with PostgreSQL **partial unique indexes**:
-```sql
-CREATE UNIQUE INDEX idx_players_coach_active_name
-ON players (user_id, LOWER(TRIM(name)))
-WHERE deleted_at IS NULL;
-```
+**Decision**  
+Track token lineage, store secure token representations, rotate tokens, and allow a bounded concurrency grace path for legitimate in-flight refreshes while retaining replay detection after that path.
 
-### Trade-offs
-- All domain queries must explicitly include `WHERE deleted_at IS NULL` guards.
+**Tradeoff**  
+Authentication becomes stateful and transaction-sensitive.
 
-### Result
-Historical matches and analytics remain 100% intact; coaches can reuse athlete names after deletion without index violations.
+**Result**  
+Mobile resume can tolerate legitimate parallel refresh behavior without giving up rotation/replay controls.
 
 ---
 
-## ADR-008: Comprehensive Multi-Tier Quality Strategy (Unit, Contract, E2E, Capacity)
+## ADR-007 — Soft deletion and relational constraints for historical integrity
 
-### Context
-Live sporting events cannot be paused to debug mobile software defects. Quality verification must prove reliability across native mobile devices, network transitions, localization, and high concurrency.
+**Problem**  
+Coaches may archive players/teams while historical matches and analytics still depend on those entities.
 
-### Constraints
-- Testing only in web browsers fails to expose mobile safe-area, haptic, and orientation issues.
-- Heavy reliance on manual QA slows down continuous delivery.
+**Constraint**  
+Hard deletion can break history; ordinary uniqueness rules can also prevent recreating an active entity after archival.
 
-### Decision
-Implement a 5-tier automated testing pyramid:
-1. **Static Analysis**: TypeScript `--noEmit`, scoped ESLint, Prettier, line-level secret scans.
-2. **Unit & Contract**: Vitest (backend domain logic, concurrency scripts) and Angular/Jasmine (NgRx reducers, pipes, services).
-3. **Database Concurrency Tests**: Explicit integration tests validating token rotation grace periods and transaction rollbacks.
-4. **Playwright E2E**: Smoke, visual regression, accessibility (a11y), and bilingual resilience (`resilience-en`, `resilience-ar`).
-5. **k6 Capacity Engineering**: Automated performance testing covering average-load, stress, spike, soak, and live-match event write capacity.
+**Decision**  
+Use history-preserving archival/soft-delete semantics where needed and partial indexes/owner-scoped constraints for active records.
 
-### Trade-offs
-- Higher initial investment in CI infrastructure and test maintenance.
+**Tradeoff**  
+Repositories must consistently filter active vs archived records.
 
-### Result
-**390 verified test files** protecting production; zero regression escapes during major version upgrades.
+**Result**  
+Historical references can remain intact while active data rules stay enforceable.
+
+---
+
+## ADR-008 — Layered verification instead of one test metric
+
+**Problem**  
+Live match behavior spans UI state, API policy, PostgreSQL transactions, network recovery, localization and release behavior.
+
+**Constraint**  
+A single test count or coverage percentage does not prove those failure paths.
+
+**Decision**  
+Use layered unit/state, API integration, database/concurrency, E2E/responsive/localization and release checks.
+
+**Tradeoff**  
+The verification system costs more to maintain than a narrow unit-test suite.
+
+**Result**  
+Quality evidence maps to real product risks rather than a volatile file-count badge.

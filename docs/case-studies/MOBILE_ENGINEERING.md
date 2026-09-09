@@ -1,55 +1,49 @@
-# Case Study: Cross-Platform Mobile Engineering & RTL Localization
+# Case study: cross-platform mobile engineering and RTL/LTR
 
-## 1. Cross-Platform Native Architecture
+## Problem
 
-Jahiz Analytics is delivered as a production cross-platform application on both **iOS** and **Android** using **Ionic 8** and **Capacitor 7** on top of **Angular 20**.
+Jahiz is one product across iOS and Android, but live scoring has stricter interaction constraints than a typical content screen. Device safe areas, keyboards, app lifecycle, network state and Arabic/English direction can all affect the same control surface.
 
-Rather than treating the mobile client as a wrapped website, the application is engineered to operate as a first-class mobile citizen:
-- **Native Capacitor Plugins**: Direct integration with device hardware APIs:
-  - `@capacitor/haptics`: Tactile feedback confirming point and penalty button presses without requiring the operator to look away from the mat.
-  - `@capacitor/screen-orientation`: Locks appropriate orientation during active scoring.
-  - `@capacitor/keyboard`: Adaptive viewport resizing during athlete profile creation and search.
-  - `@capacitor/network`: Real-time connection status monitoring for optimistic state coordination.
-  - `@capacitor/status-bar` & `@capacitor/splash-screen`: Seamless native launch and system bar theming.
+## Constraints
 
----
+- compact phones and larger mobile/tablet layouts;
+- notches, gesture areas and safe-area insets;
+- Arabic RTL and English LTR;
+- mixed-direction athlete names and sports terminology;
+- app background/foreground transitions;
+- native feedback and network/device APIs where useful.
 
-## 2. Safe-Area & Viewport Geometry
+## Decision
 
-Handheld mobile devices feature diverse physical constraints: notches, dynamic islands, rounded display corners, bottom gesture indicators, and camera cutouts.
+### Cross-platform shell
 
-### Explicit Safe-Area Inset Ownership
-A common defect in hybrid mobile apps is double-padded safe areas (where both parent container and child component add safe insets) or clipped action buttons on compact screens.
+Angular/Ionic provides the application UI and navigation model, while Capacitor bridges native runtime concerns. Native plugins are used selectively for capabilities such as device lifecycle/network state, haptics, keyboard/safe-area behavior or other platform integrations used by the product.
 
-Jahiz enforces strict single-point safe-area ownership:
-- **Header Budget**: Top safe inset is owned exclusively by the header track.
-- **Action Surface**: Lateral safe insets are owned by the root scorer shell.
-- **Bottom Navigation**: Bottom safe inset is reserved for gesture pill clearance.
-- **Scroll Ownership**: On constrained screen heights (e.g. 320×568 or 375×667), only the action grid scrolls; header, timer controls, and footer action buttons remain permanently pinned.
+### Safe-area ownership
 
-All touch targets strictly adhere to the **44×44 CSS pixel minimum requirement**, verified across viewport matrices from 320 px to 1024 px tablet devices.
+Safe-area padding is owned deliberately rather than being added independently by nested components. Live-match regions define which layer owns header, lateral and bottom insets so controls are less likely to be clipped or double-padded.
 
----
+### RTL/LTR as layout architecture
 
-## 3. Bilingual Internationalization & True RTL Layouts
+Direction is treated as a layout input:
 
-Karate has a massive international footprint across both the Middle East and globally. Jahiz was built from day one with **first-class Arabic and English parity**.
+- CSS logical properties are preferred over duplicated left/right rules;
+- directional icons and alignment respond to `dir`;
+- mixed Arabic/Latin content is handled explicitly where needed;
+- localized numeric/text formatting is applied at the presentation layer rather than mutating domain values.
 
-```
-LTR Layout (English)                 RTL Layout (Arabic)
-┌──────────────────────────┐         ┌──────────────────────────┐
-│ [Score: AKA] [Timer] [AO]│         │ [AO] [Timer] [Score: AKA]│
-│                          │         │                          │
-│ [Actions]        [Points]│         │ [Points]        [Actions]│
-│                          │         │                          │
-│ [End Match]        [Undo]│         │ [Undo]        [End Match]│
-└──────────────────────────┘         └──────────────────────────┘
-```
+### Regression across languages and geometry
 
-### True Bidirectional Layout Engine
-Internationalization in Jahiz is an architectural concern, not simple string replacement:
-- **Directional Flex & Grid Alignment**: Layouts invert dynamically based on document direction (`dir="rtl"` vs `dir="ltr"`).
-- **Icon Mirroring**: Directional icons (arrows, chevrons, progression markers) invert automatically in RTL mode, while universal sports symbols retain their semantic orientation.
-- **Mixed-Direction Content**: Athlete names frequently appear in Latin script while interface labels are in Arabic. Dedicated bidirectional CSS rules prevent punctuation jumping and text overlap.
-- **Localized Numbers**: Numerical displays on scoreboards and statistics leverage a custom `ArabicNumbersPipe` to render Eastern Arabic numerals (`٠١٢٣٤٥٦٧٨٩`) consistently where culturally preferred.
-- **Pre-Build Translation Audits**: Build scripts (`npm run i18n:check`) parse all templates to ensure zero hardcoded strings and 100% key parity between English and Arabic dictionaries.
+Critical views are exercised in both directions and across representative viewport classes. The objective is behavioral parity: the same domain action should remain understandable and reachable even when layout direction changes.
+
+## Tradeoffs
+
+- hybrid mobile still requires platform-specific testing;
+- logical CSS and direction-aware components need discipline across every feature;
+- safe-area ownership and keyboard behavior can regress when layout responsibilities are unclear.
+
+## Result
+
+One application codebase can deliver the same match/domain workflows across iOS and Android while treating Arabic and English as first-class presentation modes rather than separate products.
+
+Related: [Testing and quality](../TESTING_AND_QUALITY.md).

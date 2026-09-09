@@ -1,69 +1,56 @@
-# Case Study: Production Reliability & Fault Tolerance
+# Case study: reliability and recovery
 
-## 1. Production Resilience Principles
+## Reliability model
 
-When building software for live sports events, reliability cannot be an afterthought. Live sporting matches cannot be replayed due to an application crash, dropped network packet, or expired session token.
+Jahiz reliability is built from several bounded mechanisms rather than one "never fails" guarantee:
 
-Jahiz Analytics implements defensive engineering at every system layer:
-
-```
-┌──────────────────────────────────────────────────────────────────┐
-│ Client Layer: Optimistic FIFO Queue • Bounded Retries • CLS = 0  │
-├──────────────────────────────────────────────────────────────────┤
-│ Network Layer: Idempotency Keys (client_event_id) • Grace Window │
-├──────────────────────────────────────────────────────────────────┤
-│ Backend Layer: Layered Policy Guards • Token Rotation • PoolClient│
-├──────────────────────────────────────────────────────────────────┤
-│ Database Layer: Terminal Status Triggers • Soft Deletes • Migr.  │
-├──────────────────────────────────────────────────────────────────┤
-│ Release Layer: Automated Preflight • Zero-Downtime Rollback Path │
-└──────────────────────────────────────────────────────────────────┘
+```text
+Client      optimistic state · pending commands · lifecycle revalidation
+Network     idempotent event identity · bounded retries
+Backend     policy guards · canonical state · explicit errors
+Database    transactions · constraints · history-preserving records
+Worker      claim/retry/stale-task lifecycle
+Release     migration preflight · health/readiness · recovery procedures
 ```
 
----
+## Idempotent match events
 
-## 2. Idempotency & Network Resilience
+**Problem:** an interrupted request may be retried even though the first attempt reached the server.
 
-Arena Wi-Fi is notoriously flaky. If an HTTP request recording a match event is interrupted, the mobile client must safely retry without risking duplicate point scoring.
+**Decision:** client-originated mutations carry a stable event identity. Persistence checks that identity in the context of the match before applying a duplicate domain effect.
 
-### Mechanism:
-1. Every client mutation generates a unique `client_event_id` (UUID v4) prior to dispatch.
-2. The backend repository checks the composite unique constraint `(match_id, client_event_id)` inside an isolated transaction.
-3. If an event with the same identifier already exists, the server short-circuits execution, commits nothing new, and returns the current canonical match state with HTTP 200 OK.
+**Tradeoff:** both client and server must preserve identity semantics consistently.
 
----
+**Result:** retry behavior has an explicit deduplication path instead of assuming the network delivers each command exactly once.
 
-## 3. Cryptographic Token Rotation with Concurrency Grace
+## Session rotation under mobile concurrency
 
-Mobile sessions must remain secure without forcing frequent disruptive re-logins during active competitions.
+**Problem:** several API calls can race when a mobile app resumes and needs refreshed authentication.
 
-### The Race Condition:
-On mobile app resume, multiple Angular components may trigger parallel API requests (e.g., fetching user profile, active roster, and tournament status). With standard single-use refresh tokens, the first request refreshes the token, causing all subsequent parallel requests to present a now-invalid token and force-logout the user.
+**Decision:** refresh tokens rotate with server-side lineage/replay state and a bounded concurrency path for legitimate parallel refreshes.
 
-### The Solution (Migration 033):
-The backend implements **Refresh Token Rotation with a 30-Second Concurrency Grace Period**:
-- Tokens are tracked in a relational table with parent/child family lineage.
-- When a refresh token is exchanged, a new token pair is issued.
-- If concurrent requests submit the same refresh token within 30 seconds of its initial rotation, the server recognizes the in-flight grace window and returns the already-issued new token pair.
-- If a used token is submitted *after* the 30-second window, the system flags potential token theft and revokes the entire token family immediately.
+**Tradeoff:** session refresh becomes stateful and transaction-sensitive.
 
----
+**Result:** the design can handle legitimate concurrent refresh activity while retaining replay detection outside the allowed concurrency path.
 
-## 4. Zero-Downtime Database Migration Governance
+## Transaction and history safety
 
-Database schema modifications must never break running application instances or disrupt active competitions.
+Important multi-write operations use database transactions so partial updates can be rolled back. Historical entities are archived/soft-deleted where destructive removal would break match review or analytics references.
 
-### The Migration Safety Protocol:
-1. **Preflight Classification**: Prior to deployment, `migration-classifier.ts` analyzes pending SQL files. Only additive changes (adding nullable columns, new tables, non-blocking indexes) are permitted in rolling updates.
-2. **Backward Compatibility**: Code is deployed in two phases for breaking changes: expand first, migrate data, contract later.
-3. **Database Trigger Protection**: Critical invariants (such as preventing event modifications on completed matches) are enforced by database triggers, making audit integrity independent of application code bugs.
+Backend ownership/capability checks remain authoritative even when the frontend hides or disables unavailable actions.
 
----
+## Schema and client compatibility
 
-## 5. Automated Rollback & Observability
+Schema changes prefer additive/backward-compatible rollout where practical. More disruptive changes require phased expand/migrate/contract handling rather than assuming every installed client updates at the same moment.
 
-- **Sentry Integration**: Monitored across all tiers:
-  - Client errors captured via `@sentry/angular` and `@sentry/capacitor`.
-  - Backend API errors captured via `@sentry/node`.
-  - Releases tagged with the Git commit SHA; source maps uploaded during CI build.
-- **Automated Rollback Trigger**: GitLab CI deploys containers using health and readiness probes (`/health`, `/health/ready`). If the container fails readiness within the observation threshold, the deployment script triggers an immediate, zero-downtime rollback to the previous immutable release artifact.
+A mobile version policy provides an explicit way to distinguish supported clients from clients that should update.
+
+## Recovery and observability
+
+Health/readiness checks and application error monitoring provide release and runtime signals. Recovery can include redeploying or rolling back to a previously verified release artifact, but this document does not promise instantaneous or interruption-free recovery for every failure mode.
+
+## Result
+
+Failure paths—duplicate requests, stale sessions, partial writes, background-task failures and version mismatch—have explicit handling mechanisms that can be tested and operated.
+
+Related: [Release engineering](../RELEASE_ENGINEERING.md) · [Testing and quality](../TESTING_AND_QUALITY.md).

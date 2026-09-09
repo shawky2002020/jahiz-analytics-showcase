@@ -1,84 +1,67 @@
-# Case Study: The Real-Time Live Match State Engine
+# Case study: live match state engine
 
-![Live Match Flow](../../assets/diagrams/live-match-flow.svg)
+![Live match flow](../../assets/diagrams/live-match-flow.svg)
 
-## 1. Problem & Context
+## Problem
 
-In Olympic and WKF karate, matches are characterized by lightning-fast exchanges. An athlete executes a blitz attack, scores a technique, and the referee halts the action within seconds. 
+A karate match operator records score changes, penalties, match state and timer-related actions while attention remains on the bout. Waiting for every request to complete before updating the screen makes the interface feel disconnected from the operator's action; blindly trusting local state risks divergence from server rules.
 
-The match operator must:
-- Record points (Yuko: 1 pt, Waza-ari: 2 pts, Ippon: 3 pts) for either the red (AKA) or blue (AO) athlete.
-- Track cumulative penalties (Category 1 & Category 2 infractions, Chui, Hansoku-Chake).
-- Record and manage Senshu (first undisputed point advantage, which determines tie-breakers).
-- Control the 1 Hz countdown match clock (start, pause, adjust seconds).
-- Recover from accidental operator mis-taps via instant **Undo**.
-- Operate reliably in crowded sports arenas with unstable Wi-Fi and cellular connections.
+## Constraints
 
-A standard client-server request/response model fails completely here: a 300 ms network lag causes operator hesitation, duplicate button taps, and desynchronized timing.
+- mobile connectivity can be intermittent;
+- retries and accidental double taps are possible;
+- score/penalty state has ordering semantics;
+- the app can background and resume during an active match;
+- critical controls should remain stable while timer/network state changes;
+- the backend must remain the source of truth.
 
----
+## Decision
 
-## 2. Engineering Architecture
+### Optimistic local state
 
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                   Live Match Operator Action                     │
-└─────────────────────────────────┬────────────────────────────────┘
-                                  │
-                                  ▼
-┌──────────────────────────────────────────────────────────────────┐
-│                    NgRx Optimistic Reducer                       │
-│    Score / Penalties / Senshu updated locally (0 ms latency)     │
-└─────────────────────────────────┬────────────────────────────────┘
-                                  │
-                                  ▼
-┌──────────────────────────────────────────────────────────────────┐
-│                    In-Memory FIFO Command Queue                  │
-│    Assigned client_event_id • Ordered command serialization      │
-└─────────────────────────────────┬────────────────────────────────┘
-                                  │
-                                  ▼ (Background HTTPS POST /event)
-┌──────────────────────────────────────────────────────────────────┐
-│                    Node.js Backend Validation                    │
-│    Idempotency verification • Terminal status check              │
-└─────────────────────────────────┬────────────────────────────────┘
-                                  │
-                                  ▼
-┌──────────────────────────────────────────────────────────────────┐
-│                   PostgreSQL ACID Transaction                    │
-│    Trigger check • Append match_events • Update match totals     │
-└─────────────────────────────────┬────────────────────────────────┘
-                                  │
-                                  ▼ (HTTP 200 OK + Canonical State)
-┌──────────────────────────────────────────────────────────────────┐
-│                    Client UI Reconciliation                      │
-│    Flush FIFO command • Reconcile against authoritative truth    │
-└──────────────────────────────────────────────────────────────────┘
+NgRx updates the visible match state immediately for eligible operator actions. The command is also represented as pending work rather than being treated as final truth.
+
+```text
+tap
+ │
+ ▼
+optimistic reducer
+ │
+ ▼
+ordered pending command
+ │
+ ▼
+API validation + transaction
+ │
+ ├── accepted → acknowledge/reconcile
+ └── rejected → rollback/revalidate
 ```
 
----
+### Ordered, idempotent commands
 
-## 3. Key Engineering Challenges & Solutions
+Client-originated match events carry an event identity used by backend persistence to recognize retries. Pending actions are serialized so later actions are not silently committed ahead of earlier dependent state.
 
-### A. Zero Cumulative Layout Shift (CLS) on Live Controls
-- **Symptom**: Earlier versions had dynamic error banners that shifted the footer controls down by 25–62 px whenever network connectivity dropped or an error occurred. During rapid scoring, this caused operators to mis-tap buttons.
-- **Root Cause**: Status components participated in implicit grid tracks, stealing height from the action container.
-- **Resolution**: Rebuilt the scorer using explicit CSS Grid row allocations. Connection feedback and mutation errors now share the action container in a dedicated overlay layer that occupies zero layout height when idle. Controls maintain 100% stable pixel geometry across all states.
-- **Result**: Clock ticks layout recalculations dropped from **146 to 2 per 2 seconds**; control movement reduced to **0 px**.
+### Lifecycle-aware revalidation
 
-### B. Route-Aware Lifecycle Revalidation Guard (`revalidateLiveMatch`)
-- **Symptom**: When a user switched to another app and returned to Jahiz, or when the phone recovered cellular signal, standard hydration dispatched full match initialization, resetting the active clock countdown and discarding unacknowledged queued commands.
-- **Resolution**: Created a dedicated `revalidateLiveMatch` NgRx effect utilizing RxJS `exhaustMap`. Non-terminal revalidation preserves the exact running clock instance, log references, and pending commands while refreshing authentication credentials. Stale route responses are discarded.
+Foreground/resume and network-recovery paths revalidate active match state instead of performing a destructive full initialization. This lets the client refresh authoritative data while preserving the local match context that still needs reconciliation.
 
-### C. Idempotency & Duplicate Replay Protection
-- **Symptom**: Spotty arena network causes client HTTP retries, risking duplicate point recording.
-- **Resolution**: Every client action generates a UUID `client_event_id`. The database enforces uniqueness on `(match_id, client_event_id)`. If a retransmitted command arrives, the backend detects the existing event and returns the current authoritative state without re-applying score mutations.
+### Undo as a domain operation
 
-### D. Destructive Action Recovery (Undo Pipeline)
-- **Design**: Live sports require instant recovery from operator mistakes. Jahiz implements single-action Undo via `DELETE /event/:eventId`.
-- **Execution**: The server executes the deletion inside an ACID transaction, recalculates score and Senshu totals from the remaining historical event stream, updates the match summary, and returns the recomputed canonical state. The client updates its NgRx store reactively.
-- **Note on Redo**: The system explicitly avoids fabricating Redo semantics, as live sports timelines move forward in real time; an undone mistake cannot be re-applied after subsequent match action occurs.
+Undo is handled through the server, not by simply decrementing a client number. The backend removes/reverses the eligible event within domain rules, recomputes affected canonical match state, and returns the result to the client.
 
-### E. PostgreSQL Terminal State Trigger Enforcement
-- **Design**: Once a match concludes, its event log must become immutable.
-- **Implementation**: Migration `011_harden_match_event_terminal_trigger.sql` installs the `prevent_terminal_match_mutation()` trigger. If a client attempts to append, modify, or delete an event on a match with status `COMPLETED`, the database raises an exception immediately.
+### Stable interaction geometry
+
+Timer updates and transient connection/error messages are isolated from the primary action layout. The goal is that temporary feedback does not push frequently tapped controls into new positions.
+
+## Tradeoffs
+
+- optimistic UX requires more client state than request/response CRUD;
+- idempotency requires stable command identity and database constraints/logic;
+- reconciliation paths need dedicated regression tests;
+- server-side Undo can cost more work than a local inverse action, but preserves domain correctness.
+
+## Result
+
+The operator receives immediate local feedback while accepted match state remains server-authoritative. Retries, lifecycle transitions and correction flows have explicit recovery semantics instead of relying on accidental UI state.
+
+Related: [Reliability](./RELIABILITY.md) · [Architecture](../ARCHITECTURE.md).

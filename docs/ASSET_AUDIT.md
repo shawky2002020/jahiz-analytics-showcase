@@ -1,12 +1,16 @@
 # Public asset audit
 
-| File/group | Purpose | Source | Sanitization / review | Publication state |
-| --- | --- | --- | --- | --- |
-| `assets/brand/*.png` | Official Jahiz logo variants | Approved application brand assets | Re-exported as optimized PNG; textual metadata stripped; no embedded paths, URLs, or comments found | Ready |
-| `assets/brand/*.svg` | Accessible SVG wrappers for logo variants | Showcase-created | Contains only title metadata and local image reference | Ready |
-| `assets/diagrams/*.svg` | Product explanations | Showcase-created | No private service, route, account, or infrastructure data | Ready |
-| `assets/hero/jahiz-hero.webp` | README hero | Showcase-created composition | Uses only sanitized logo and abstract diagrammatic shapes | Ready |
-| `assets/hero/github-social-preview.png` | GitHub social preview | Showcase-created composition | Uses only sanitized logo and abstract diagrammatic shapes | Ready |
-| `assets/screenshots/*.webp` | Real product screens | Owner-provided installed-app capture library | Eight screens were traced to local fictional demo fixtures, visually reviewed at 1080 × 1920, metadata-checked, re-exported with no EXIF/XMP/IPTC/text metadata, and labeled as fictional demo data | Ready |
+## Publication rules
 
-Original private source locations and any capture-session identifiers are intentionally omitted from this public audit.
+| File/group | Purpose | Review rule | State |
+| --- | --- | --- | --- |
+| `assets/brand/` | Product identity | Public brand material; no embedded private paths or credentials | Retained |
+| `assets/store/` | Store calls to action | Only current App Store / Google Play badges are used in the README | Retained |
+| `assets/hero/` | README and repository presentation | Public-safe compositions only | Retained selectively |
+| `assets/diagrams/` | Explain architecture and flows | Keep diagrams that add technical understanding; avoid metric/badge decoration | Retained selectively |
+| `assets/screenshots/` | Show the real product | Use sanitized/non-production data; main README uses a curated subset | Retained |
+| repository-hosted demo video files | Former synthetic walkthrough/recruiter cuts | Replaced by the real LinkedIn launch as primary product proof | Removed |
+
+The launch is referenced externally at https://lnkd.in/p/eqWueRtk. No local video binary is required for README rendering.
+
+Original private source locations, capture-session identifiers, customer data and production infrastructure details are intentionally excluded from this public audit.
