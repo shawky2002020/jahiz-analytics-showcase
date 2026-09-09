@@ -1,150 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 560" width="100%" height="100%" role="img" aria-labelledby="rp-title rp-desc">
-  <title id="rp-title">Production Release Engineering &amp; CI/CD Lifecycle</title>
-  <desc id="rp-desc">Automated validation, migration preflight, zero-downtime rolling deployment, instant rollback, and mobile app store releases.</desc>
-  <defs>
-    <linearGradient id="bg6" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#0b0f19" />
-      <stop offset="100%" stop-color="#030712" />
-    </linearGradient>
-    <linearGradient id="blue6" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="100%" stop-color="#2563eb" />
-    </linearGradient>
-    <marker id="ar6" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b" />
-    </marker>
-  </defs>
-
-  <rect width="1100" height="560" rx="16" fill="url(#bg6)" stroke="#1e293b" stroke-width="2" />
-
-  <g transform="translate(40, 40)">
-    <text font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" fill="#f8fafc">Production Release Pipeline &amp; Migration Governance</text>
-    <text y="22" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#94a3b8">GitLab CI/CD 6-stage automation with preflight migration safety, immutable containers, and mobile store tracks</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">Jahiz release safety flow</title>
+  <desc id="desc">A release progresses through validation, build, staging, verification, preflight and controlled production deployment.</desc>
+  <rect width="1200" height="520" rx="24" fill="#0b1220"/>
+  <text x="60" y="68" font-family="system-ui,-apple-system,sans-serif" font-size="28" font-weight="700" fill="#f8fafc">Release Safety Flow</text>
+  <text x="60" y="102" font-family="system-ui,-apple-system,sans-serif" font-size="15" fill="#94a3b8">Conceptual stages; exact CI jobs can evolve</text>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#64748b"/></marker></defs>
+  <g font-family="system-ui,-apple-system,sans-serif">
+    <g transform="translate(50 185)"><rect width="150" height="110" rx="16" fill="#111c31" stroke="#334155"/><text x="75" y="42" text-anchor="middle" font-size="16" font-weight="700" fill="#f8fafc">Validate</text><text x="75" y="72" text-anchor="middle" font-size="12" fill="#94a3b8">types · tests</text><text x="75" y="92" text-anchor="middle" font-size="12" fill="#94a3b8">i18n · secrets</text></g>
+    <g transform="translate(240 185)"><rect width="150" height="110" rx="16" fill="#111c31" stroke="#38bdf8"/><text x="75" y="42" text-anchor="middle" font-size="16" font-weight="700" fill="#f8fafc">Build</text><text x="75" y="72" text-anchor="middle" font-size="12" fill="#94a3b8">reviewed release</text><text x="75" y="92" text-anchor="middle" font-size="12" fill="#94a3b8">artifact</text></g>
+    <g transform="translate(430 185)"><rect width="150" height="110" rx="16" fill="#111c31" stroke="#a78bfa"/><text x="75" y="42" text-anchor="middle" font-size="16" font-weight="700" fill="#f8fafc">Staging</text><text x="75" y="72" text-anchor="middle" font-size="12" fill="#94a3b8">candidate +</text><text x="75" y="92" text-anchor="middle" font-size="12" fill="#94a3b8">compatible schema</text></g>
+    <g transform="translate(620 185)"><rect width="150" height="110" rx="16" fill="#111c31" stroke="#34d399"/><text x="75" y="42" text-anchor="middle" font-size="16" font-weight="700" fill="#f8fafc">Verify</text><text x="75" y="72" text-anchor="middle" font-size="12" fill="#94a3b8">health · readiness</text><text x="75" y="92" text-anchor="middle" font-size="12" fill="#94a3b8">critical smoke</text></g>
+    <g transform="translate(810 185)"><rect width="150" height="110" rx="16" fill="#111c31" stroke="#f59e0b"/><text x="75" y="42" text-anchor="middle" font-size="16" font-weight="700" fill="#f8fafc">Preflight</text><text x="75" y="72" text-anchor="middle" font-size="12" fill="#94a3b8">schema · migration</text><text x="75" y="92" text-anchor="middle" font-size="12" fill="#94a3b8">recovery plan</text></g>
+    <g transform="translate(1000 185)"><rect width="150" height="110" rx="16" fill="#111c31" stroke="#ef4444"/><text x="75" y="42" text-anchor="middle" font-size="16" font-weight="700" fill="#f8fafc">Production</text><text x="75" y="72" text-anchor="middle" font-size="12" fill="#94a3b8">controlled</text><text x="75" y="92" text-anchor="middle" font-size="12" fill="#94a3b8">promotion</text></g>
   </g>
-
-  <!-- 6 Stages Grid -->
-  <g transform="translate(40, 95)">
-    <!-- Stage 1: Validate -->
-    <rect width="150" height="230" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1.5" />
-    <rect x="0" y="0" width="150" height="26" rx="8" fill="#1e293b" />
-    <text x="75" y="18" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" fill="#f1f5f9" text-anchor="middle">1. VALIDATE</text>
-    <text x="12" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Postgres 17 service</text>
-    <text x="12" y="64" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Fresh DB bootstrap</text>
-    <text x="12" y="82" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Baseline migrations</text>
-    <text x="12" y="100" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• 390 test files run</text>
-    <text x="12" y="118" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Scoped lints &amp; types</text>
-    <text x="12" y="136" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• i18n strict check</text>
-    <text x="12" y="154" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Secret line scanning</text>
-    <text x="12" y="180" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#34d399">✓ Gate: Fail Closed</text>
-
-    <!-- Connector 1-2 -->
-    <path d="M 150 115 L 175 115" stroke="#64748b" stroke-width="1.5" marker-end="url(#ar6)" />
-
-    <!-- Stage 2: Build -->
-    <g transform="translate(175, 0)">
-      <rect width="150" height="230" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1.5" />
-      <rect x="0" y="0" width="150" height="26" rx="8" fill="#1e293b" />
-      <text x="75" y="18" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" fill="#f1f5f9" text-anchor="middle">2. BUILD</text>
-      <text x="12" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Shared TS build</text>
-      <text x="12" y="64" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Angular prod bundle</text>
-      <text x="12" y="82" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Server tsc compile</text>
-      <text x="12" y="100" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Multi-stage Docker</text>
-      <text x="12" y="118" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Non-root nodejs</text>
-      <text x="12" y="136" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• DOCR image push</text>
-      <text x="12" y="154" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Tagged by Git SHA</text>
-      <text x="12" y="180" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#38bdf8">✓ Immutable Image</text>
-    </g>
-
-    <!-- Connector 2-3 -->
-    <path d="M 325 115 L 350 115" stroke="#64748b" stroke-width="1.5" marker-end="url(#ar6)" />
-
-    <!-- Stage 3: Deploy Staging -->
-    <g transform="translate(350, 0)">
-      <rect width="150" height="230" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1.5" />
-      <rect x="0" y="0" width="150" height="26" rx="8" fill="#1e293b" />
-      <text x="75" y="18" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" fill="#f1f5f9" text-anchor="middle">3. STAGING</text>
-      <text x="12" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Container pull DOCR</text>
-      <text x="12" y="64" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Staging DB migrate</text>
-      <text x="12" y="82" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Schema SHA check</text>
-      <text x="12" y="100" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Staging web release</text>
-      <text x="12" y="118" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Atomic symlink swap</text>
-      <text x="12" y="136" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Isolated test data</text>
-      <text x="12" y="180" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#38bdf8">✓ Isolated Staging</text>
-    </g>
-
-    <!-- Connector 3-4 -->
-    <path d="M 500 115 L 525 115" stroke="#64748b" stroke-width="1.5" marker-end="url(#ar6)" />
-
-    <!-- Stage 4: Verify Staging -->
-    <g transform="translate(525, 0)">
-      <rect width="150" height="230" rx="8" fill="#0f172a" stroke="#334155" stroke-width="1.5" />
-      <rect x="0" y="0" width="150" height="26" rx="8" fill="#1e293b" />
-      <text x="75" y="18" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" fill="#f1f5f9" text-anchor="middle">4. VERIFY</text>
-      <text x="12" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• /health HTTP 200</text>
-      <text x="12" y="64" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• /health/ready check</text>
-      <text x="12" y="82" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Worker port 8081</text>
-      <text x="12" y="100" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Staging smoke test</text>
-      <text x="12" y="118" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Sentry connection</text>
-      <text x="12" y="136" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Release manifest</text>
-      <text x="12" y="180" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#34d399">✓ Health Verified</text>
-    </g>
-
-    <!-- Connector 4-5 -->
-    <path d="M 675 115 L 700 115" stroke="#64748b" stroke-width="1.5" marker-end="url(#ar6)" />
-
-    <!-- Stage 5: Preflight -->
-    <g transform="translate(700, 0)">
-      <rect width="150" height="230" rx="8" fill="#0f172a" stroke="#fbbf24" stroke-width="1.5" />
-      <rect x="0" y="0" width="150" height="26" rx="8" fill="#1e293b" />
-      <text x="75" y="18" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" fill="#fbbf24" text-anchor="middle">5. PREFLIGHT</text>
-      <text x="12" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Migration classifier</text>
-      <text x="12" y="64" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Dry-run DB plan</text>
-      <text x="12" y="82" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Non-breaking check</text>
-      <text x="12" y="100" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Render rollback spec</text>
-      <text x="12" y="118" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Zero-downtime test</text>
-      <text x="12" y="180" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#fbbf24">✓ Safety Cleared</text>
-    </g>
-
-    <!-- Connector 5-6 -->
-    <path d="M 850 115 L 875 115" stroke="#64748b" stroke-width="1.5" marker-end="url(#ar6)" />
-
-    <!-- Stage 6: Deploy Production -->
-    <g transform="translate(875, 0)">
-      <rect width="145" height="230" rx="8" fill="#0f172a" stroke="#059669" stroke-width="2" />
-      <rect x="0" y="0" width="145" height="26" rx="8" fill="#1e293b" />
-      <text x="72" y="18" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="700" fill="#34d399" text-anchor="middle">6. PRODUCTION</text>
-      <text x="12" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Rolling rollout</text>
-      <text x="12" y="64" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• App Platform deploy</text>
-      <text x="12" y="82" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Sentry release tag</text>
-      <text x="12" y="100" font-family="system-ui, -apple-system, sans-serif" font-size="10" fill="#94a3b8">• Source-maps upload</text>
-      <text x="12" y="125" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#f87171">↩ Rollback Plan</text>
-      <text x="12" y="142" font-family="system-ui, -apple-system, sans-serif" font-size="9" fill="#94a3b8">Instant revert on fail</text>
-      <text x="12" y="180" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="600" fill="#34d399">✓ Zero-Downtime</text>
-    </g>
-  </g>
-
-  <!-- Bottom: Mobile Delivery Channels -->
-  <g transform="translate(40, 355)">
-    <rect width="1020" height="175" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1.5" />
-    <text x="24" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">Mobile Delivery &amp; Store Publishing Channels</text>
-    <text x="420" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#38bdf8">Automated Mobile CI/CD &amp; Release Verification</text>
-
-    <!-- Channel 1: Android Play Store -->
-    <g transform="translate(24, 46)">
-      <rect width="470" height="110" rx="8" fill="#0f172a" stroke="#1e293b" />
-      <text x="16" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#34d399">Android: Google Play Store (Fastlane / publish-android.mjs)</text>
-      <text x="16" y="48" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Unified version gating (package.json == build.gradle versionName == versionCode)</text>
-      <text x="16" y="66" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Release AAB bundle generation with strict i18n checks</text>
-      <text x="16" y="84" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Automated delivery to Google Play Internal and Closed Testing tracks</text>
-    </g>
-
-    <!-- Channel 2: iOS App Store -->
-    <g transform="translate(520, 46)">
-      <rect width="470" height="110" rx="8" fill="#0f172a" stroke="#1e293b" />
-      <text x="16" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#38bdf8">iOS: Apple App Store (Codemagic CI/CD Automation)</text>
-      <text x="16" y="48" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Xcode project sync: MARKETING_VERSION &amp; CURRENT_PROJECT_VERSION</text>
-      <text x="16" y="66" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Automated TestFlight artifact build, certificate signing &amp; distribution</text>
-      <text x="16" y="84" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Codemagic CLI triggers: start, status, watch, list directly from scripts</text>
-    </g>
-  </g>
+  <g stroke="#64748b" stroke-width="3" fill="none" marker-end="url(#a)"><path d="M200 240 H230"/><path d="M390 240 H420"/><path d="M580 240 H610"/><path d="M770 240 H800"/><path d="M960 240 H990"/></g>
+  <text x="270" y="390" font-family="system-ui,-apple-system,sans-serif" font-size="14" fill="#94a3b8">Mobile releases additionally require build/version consistency, signing, store submission and client compatibility policy.</text>
 </svg>
