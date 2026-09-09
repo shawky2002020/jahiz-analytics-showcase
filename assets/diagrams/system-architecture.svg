@@ -1,181 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 740" width="100%" height="100%" role="img" aria-labelledby="sys-title sys-desc">
-  <title id="sys-title">Jahiz Analytics Production System Architecture</title>
-  <desc id="sys-desc">Cross-platform Angular and Ionic client, Node.js backend services, PostgreSQL database, and decoupled background worker engine.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Jahiz Analytics system architecture</title>
+  <desc id="desc">Mobile client communicates with a Node.js API backed by PostgreSQL, with a separate analytics worker claiming background tasks.</desc>
+  <rect width="1200" height="620" rx="24" fill="#0b1220"/>
+  <text x="60" y="72" font-family="system-ui,-apple-system,sans-serif" font-size="30" font-weight="700" fill="#f8fafc">Jahiz Analytics — System Architecture</text>
+  <text x="60" y="108" font-family="system-ui,-apple-system,sans-serif" font-size="16" fill="#94a3b8">Public-safe runtime boundaries and data flow</text>
+
+  <g font-family="system-ui,-apple-system,sans-serif">
+    <rect x="70" y="180" width="250" height="170" rx="18" fill="#111c31" stroke="#334155" stroke-width="2"/>
+    <text x="95" y="220" font-size="19" font-weight="700" fill="#f8fafc">Mobile client</text>
+    <text x="95" y="254" font-size="14" fill="#cbd5e1">Angular · Ionic · Capacitor</text>
+    <text x="95" y="282" font-size="14" fill="#cbd5e1">NgRx · RxJS</text>
+    <text x="95" y="318" font-size="13" fill="#94a3b8">Optimistic UI + reconciliation</text>
+
+    <rect x="475" y="150" width="250" height="200" rx="18" fill="#111c31" stroke="#38bdf8" stroke-width="2"/>
+    <text x="500" y="195" font-size="19" font-weight="700" fill="#f8fafc">HTTP API</text>
+    <text x="500" y="229" font-size="14" fill="#cbd5e1">Node.js · TypeScript · Express</text>
+    <text x="500" y="265" font-size="13" fill="#94a3b8">Authentication &amp; ownership</text>
+    <text x="500" y="289" font-size="13" fill="#94a3b8">Domain policy &amp; transactions</text>
+    <text x="500" y="313" font-size="13" fill="#94a3b8">Canonical match state</text>
+
+    <rect x="870" y="180" width="250" height="170" rx="18" fill="#111c31" stroke="#34d399" stroke-width="2"/>
+    <text x="895" y="220" font-size="19" font-weight="700" fill="#f8fafc">PostgreSQL</text>
+    <text x="895" y="254" font-size="14" fill="#cbd5e1">Transactional system of record</text>
+    <text x="895" y="286" font-size="13" fill="#94a3b8">Matches · players · teams</text>
+    <text x="895" y="310" font-size="13" fill="#94a3b8">tournaments · analytics tasks</text>
+
+    <rect x="475" y="430" width="250" height="120" rx="18" fill="#111c31" stroke="#f59e0b" stroke-width="2"/>
+    <text x="500" y="472" font-size="19" font-weight="700" fill="#f8fafc">Analytics worker</text>
+    <text x="500" y="504" font-size="14" fill="#cbd5e1">Background aggregation</text>
+    <text x="500" y="530" font-size="13" fill="#94a3b8">Task claim via SKIP LOCKED</text>
+  </g>
+
+  <g stroke="#64748b" stroke-width="3" fill="none" marker-end="url(#arrow)">
+    <path d="M320 260 H465"/>
+    <path d="M725 260 H860"/>
+    <path d="M995 350 C995 430 790 490 735 490"/>
+    <path d="M475 490 C400 490 360 360 500 350"/>
+  </g>
+  <g font-family="system-ui,-apple-system,sans-serif" font-size="12" fill="#94a3b8">
+    <text x="355" y="246">HTTPS commands / reads</text>
+    <text x="760" y="246">SQL transactions</text>
+    <text x="770" y="444">available tasks</text>
+    <text x="353" y="450">derived state</text>
+  </g>
+
   <defs>
-    <linearGradient id="bg-grad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#0b0f19" />
-      <stop offset="100%" stop-color="#030712" />
-    </linearGradient>
-    <linearGradient id="card-grad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1e293b" />
-      <stop offset="100%" stop-color="#0f172a" />
-    </linearGradient>
-    <linearGradient id="blue-grad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="100%" stop-color="#2563eb" />
-    </linearGradient>
-    <linearGradient id="red-grad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#f87171" />
-      <stop offset="100%" stop-color="#dc2626" />
-    </linearGradient>
-    <linearGradient id="emerald-grad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#34d399" />
-      <stop offset="100%" stop-color="#059669" />
-    </linearGradient>
-    <linearGradient id="amber-grad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#fbbf24" />
-      <stop offset="100%" stop-color="#d97706" />
-    </linearGradient>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b" />
-    </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
-    </marker>
-    <marker id="arrow-emerald" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399" />
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
     </marker>
   </defs>
-
-  <rect width="1200" height="740" rx="16" fill="url(#bg-grad)" stroke="#1e293b" stroke-width="2" />
-
-  <g transform="translate(40, 44)">
-    <text font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="700" fill="#f8fafc">System Architecture &amp; Service Boundaries</text>
-    <text y="24" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#94a3b8">End-to-end production topology: Mobile Client, API Service, PostgreSQL Relational Store, and Decoupled Async Worker</text>
-  </g>
-
-  <!-- LAYER 1: CLIENT TIER -->
-  <g transform="translate(40, 100)">
-    <rect width="1120" height="150" rx="12" fill="url(#card-grad)" stroke="#334155" stroke-width="1.5" />
-    <rect x="20" y="16" width="6" height="24" rx="3" fill="url(#blue-grad)" />
-    <text x="36" y="34" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700" fill="#f1f5f9">Mobile Client Tier (Cross-Platform iOS &amp; Android)</text>
-    <text x="560" y="34" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#38bdf8">Production Shipped: Google Play Store &amp; Apple App Store</text>
-
-    <g transform="translate(20, 52)">
-      <rect width="250" height="80" rx="8" fill="#0f172a" stroke="#1e293b" />
-      <text x="16" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#e2e8f0">Angular 20 &amp; Ionic 8</text>
-      <text x="16" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">Standalone Components</text>
-      <text x="16" y="64" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">OnPush, Signals &amp; RTL Engine</text>
-
-      <g transform="translate(270, 0)">
-        <rect width="260" height="80" rx="8" fill="#0f172a" stroke="#1e293b" />
-        <text x="16" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#e2e8f0">NgRx 20 State Engine</text>
-        <text x="16" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">Optimistic Scorer Reducers</text>
-        <text x="16" y="64" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">FIFO Queue &amp; Memoized Selectors</text>
-      </g>
-
-      <g transform="translate(550, 0)">
-        <rect width="260" height="80" rx="8" fill="#0f172a" stroke="#1e293b" />
-        <text x="16" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#e2e8f0">Capacitor 7 Native Runtime</text>
-        <text x="16" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">Haptics, Orientation, Camera</text>
-        <text x="16" y="64" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">Network &amp; App Lifecycle Hooks</text>
-      </g>
-
-      <g transform="translate(830, 0)">
-        <rect width="250" height="80" rx="8" fill="#0f172a" stroke="#1e293b" />
-        <text x="16" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#e2e8f0">Client Observability &amp; i18n</text>
-        <text x="16" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">Sentry Angular/Capacitor Tracing</text>
-        <text x="16" y="64" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">Bilingual AR/EN &amp; Numbers Pipe</text>
-      </g>
-    </g>
-  </g>
-
-  <!-- CONNECTOR 1 -->
-  <path d="M 600 250 L 600 290" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrow-blue)" />
-  <rect x="490" y="260" width="220" height="22" rx="4" fill="#0f172a" stroke="#1e293b" />
-  <text x="600" y="275" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#38bdf8" text-anchor="middle">HTTPS API / JWT Rotation / Sentry</text>
-
-  <!-- LAYER 2: BACKEND SERVICE TIER -->
-  <g transform="translate(40, 290)">
-    <rect width="1120" height="150" rx="12" fill="url(#card-grad)" stroke="#334155" stroke-width="1.5" />
-    <rect x="20" y="16" width="6" height="24" rx="3" fill="url(#emerald-grad)" />
-    <text x="36" y="34" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700" fill="#f1f5f9">Backend Application Service (Node.js 22 + TypeScript + Express)</text>
-    <text x="730" y="34" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#34d399">Controller → Service → Repository Architecture</text>
-
-    <g transform="translate(20, 52)">
-      <rect width="250" height="80" rx="8" fill="#0f172a" stroke="#1e293b" />
-      <text x="16" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#e2e8f0">Security &amp; Policy Guard</text>
-      <text x="16" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">Refresh Token Rotation &amp; Grace</text>
-      <text x="16" y="64" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">Account Capabilities (Coach vs Athlete)</text>
-
-      <g transform="translate(270, 0)">
-        <rect width="260" height="80" rx="8" fill="#0f172a" stroke="#1e293b" />
-        <text x="16" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#e2e8f0">Live Match Service</text>
-        <text x="16" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">Idempotency Filter (client_event_id)</text>
-        <text x="16" y="64" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">Transactional Event Appends &amp; Undo</text>
-      </g>
-
-      <g transform="translate(550, 0)">
-        <rect width="260" height="80" rx="8" fill="#0f172a" stroke="#1e293b" />
-        <text x="16" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#e2e8f0">Core Domain Modules</text>
-        <text x="16" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">Tournaments, Encounters, Teams</text>
-        <text x="16" y="64" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">Roster &amp; Athlete Management</text>
-      </g>
-
-      <g transform="translate(830, 0)">
-        <rect width="250" height="80" rx="8" fill="#0f172a" stroke="#1e293b" />
-        <text x="16" y="26" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#e2e8f0">Analytics Dispatcher</text>
-        <text x="16" y="46" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">Postgres Queue Producer</text>
-        <text x="16" y="64" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">Asynchronous Job Enqueuing</text>
-      </g>
-    </g>
-  </g>
-
-  <!-- CONNECTOR 2 -->
-  <path d="M 350 440 L 350 480" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-emerald)" />
-  <path d="M 850 440 L 850 480" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrow)" />
-  <rect x="255" y="448" width="190" height="22" rx="4" fill="#0f172a" stroke="#1e293b" />
-  <text x="350" y="463" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#34d399" text-anchor="middle">pg Pool / ACID Transactions</text>
-
-  <rect x="755" y="448" width="190" height="22" rx="4" fill="#0f172a" stroke="#1e293b" />
-  <text x="850" y="463" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#fbbf24" text-anchor="middle">Enqueue: analytics_tasks</text>
-
-  <!-- LAYER 3: STORAGE & ASYNC WORKER TIER -->
-  <g transform="translate(40, 480)">
-    <rect width="540" height="210" rx="12" fill="url(#card-grad)" stroke="#334155" stroke-width="1.5" />
-    <rect x="20" y="16" width="6" height="24" rx="3" fill="url(#blue-grad)" />
-    <text x="36" y="34" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700" fill="#f1f5f9">PostgreSQL Relational Engine</text>
-    <text x="36" y="52" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">37 Versioned SQL Migrations | Multi-Tier Relational Integrity</text>
-
-    <g transform="translate(20, 68)">
-      <rect width="235" height="120" rx="6" fill="#0f172a" stroke="#1e293b" />
-      <text x="14" y="24" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#38bdf8">Domain Entities &amp; RLS</text>
-      <text x="14" y="44" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• accounts &amp; capability tokens</text>
-      <text x="14" y="62" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• matches &amp; append-only events</text>
-      <text x="14" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• tournaments &amp; encounters</text>
-      <text x="14" y="98" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• soft-deletes &amp; partial unique idx</text>
-
-      <rect x="265" y="0" width="235" height="120" rx="6" fill="#0f172a" stroke="#1e293b" />
-      <text x="14" y="24" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#38bdf8">Queue &amp; Integrity Triggers</text>
-      <text x="14" y="44" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• analytics_tasks queue table</text>
-      <text x="14" y="62" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• terminal match status triggers</text>
-      <text x="14" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• refresh token rotation tracking</text>
-      <text x="14" y="98" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• rate limit bucket state</text>
-    </g>
-
-    <g transform="translate(580, 0)">
-      <rect width="540" height="210" rx="12" fill="url(#card-grad)" stroke="#334155" stroke-width="1.5" />
-      <rect x="20" y="16" width="6" height="24" rx="3" fill="url(#amber-grad)" />
-      <text x="36" y="34" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700" fill="#f1f5f9">Decoupled Analytics Worker Process</text>
-      <text x="36" y="52" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#fbbf24">Isolated Process (src/worker.ts) | Dedicated Health Port 8081</text>
-
-      <g transform="translate(20, 68)">
-        <rect width="235" height="120" rx="6" fill="#0f172a" stroke="#1e293b" />
-        <text x="14" y="24" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#fbbf24">Concurrency &amp; Locking</text>
-        <text x="14" y="44" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• FOR UPDATE SKIP LOCKED</text>
-        <text x="14" y="62" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Zero horizontal lock contention</text>
-        <text x="14" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Stale lease reaper (>5m restart)</text>
-        <text x="14" y="98" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Retry backoff (max 5 attempts)</text>
-
-        <rect x="265" y="0" width="235" height="120" rx="6" fill="#0f172a" stroke="#1e293b" />
-        <text x="14" y="24" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#fbbf24">Analytics Generation Engine</text>
-        <text x="14" y="44" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• MatchAnalyticsService execution</text>
-        <text x="14" y="62" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Scoring efficacy calculation</text>
-        <text x="14" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Technique &amp; momentum graphs</text>
-        <text x="14" y="98" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Historical tournament rollups</text>
-      </g>
-    </g>
-  </g>
-
-  <path d="M 580 585 L 560 585" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrow)" />
 </svg>
