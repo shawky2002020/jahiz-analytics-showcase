@@ -1,143 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1150 580" width="100%" height="100%" role="img" aria-labelledby="ap-title ap-desc">
-  <title id="ap-title">Distributed Analytics Queue &amp; Worker Engine</title>
-  <desc id="ap-desc">Asynchronous pipeline using PostgreSQL FOR UPDATE SKIP LOCKED row-level locking, decoupled worker loop, and client polling state machine.</desc>
-  <defs>
-    <linearGradient id="bg4" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#0b0f19" />
-      <stop offset="100%" stop-color="#030712" />
-    </linearGradient>
-    <linearGradient id="blue4" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="100%" stop-color="#2563eb" />
-    </linearGradient>
-    <linearGradient id="emerald4" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#34d399" />
-      <stop offset="100%" stop-color="#059669" />
-    </linearGradient>
-    <linearGradient id="amber4" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#fbbf24" />
-      <stop offset="100%" stop-color="#d97706" />
-    </linearGradient>
-    <marker id="ar4" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b" />
-    </marker>
-    <marker id="ar4-emerald" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399" />
-    </marker>
-  </defs>
-
-  <rect width="1150" height="580" rx="16" fill="url(#bg4)" stroke="#1e293b" stroke-width="2" />
-
-  <g transform="translate(40, 40)">
-    <text font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" fill="#f8fafc">Distributed Analytics Pipeline &amp; Queue Engine</text>
-    <text y="22" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#94a3b8">PostgreSQL FOR UPDATE SKIP LOCKED job queue, horizontal worker isolation, and resilient client state machine</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">Jahiz analytics processing flow</title>
+  <desc id="desc">A domain change creates an analytics task in PostgreSQL, a worker claims it using row locking, computes derived analytics, and persists the result for API reads.</desc>
+  <rect width="1200" height="520" rx="24" fill="#0b1220"/>
+  <text x="60" y="68" font-family="system-ui,-apple-system,sans-serif" font-size="28" font-weight="700" fill="#f8fafc">Match → Analytics</text>
+  <text x="60" y="102" font-family="system-ui,-apple-system,sans-serif" font-size="15" fill="#94a3b8">Heavier aggregation runs outside the interactive request path</text>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#64748b"/></marker></defs>
+  <g font-family="system-ui,-apple-system,sans-serif">
+    <g transform="translate(55 185)"><rect width="190" height="120" rx="16" fill="#111c31" stroke="#334155"/><text x="95" y="43" text-anchor="middle" font-size="16" font-weight="700" fill="#f8fafc">Domain change</text><text x="95" y="75" text-anchor="middle" font-size="13" fill="#94a3b8">match finalized or</text><text x="95" y="97" text-anchor="middle" font-size="13" fill="#94a3b8">analytics invalidated</text></g>
+    <g transform="translate(300 185)"><rect width="190" height="120" rx="16" fill="#111c31" stroke="#38bdf8"/><text x="95" y="43" text-anchor="middle" font-size="16" font-weight="700" fill="#f8fafc">Task row</text><text x="95" y="75" text-anchor="middle" font-size="13" fill="#94a3b8">PostgreSQL lifecycle</text><text x="95" y="97" text-anchor="middle" font-size="13" fill="#94a3b8">pending · retry · done</text></g>
+    <g transform="translate(545 185)"><rect width="190" height="120" rx="16" fill="#111c31" stroke="#f59e0b"/><text x="95" y="43" text-anchor="middle" font-size="16" font-weight="700" fill="#f8fafc">Worker claim</text><text x="95" y="75" text-anchor="middle" font-size="13" fill="#94a3b8">FOR UPDATE</text><text x="95" y="97" text-anchor="middle" font-size="13" fill="#94a3b8">SKIP LOCKED</text></g>
+    <g transform="translate(790 185)"><rect width="190" height="120" rx="16" fill="#111c31" stroke="#a78bfa"/><text x="95" y="43" text-anchor="middle" font-size="16" font-weight="700" fill="#f8fafc">Aggregation</text><text x="95" y="75" text-anchor="middle" font-size="13" fill="#94a3b8">derive match / athlete</text><text x="95" y="97" text-anchor="middle" font-size="13" fill="#94a3b8">analytics</text></g>
+    <g transform="translate(1030 185)"><rect width="120" height="120" rx="16" fill="#111c31" stroke="#34d399"/><text x="60" y="43" text-anchor="middle" font-size="16" font-weight="700" fill="#f8fafc">Persist</text><text x="60" y="75" text-anchor="middle" font-size="13" fill="#94a3b8">derived</text><text x="60" y="97" text-anchor="middle" font-size="13" fill="#94a3b8">state</text></g>
   </g>
-
-  <!-- Step 1: Match Complete Trigger -->
-  <g transform="translate(50, 110)">
-    <rect width="200" height="150" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.5" />
-    <rect x="14" y="14" width="6" height="20" rx="3" fill="url(#blue4)" />
-    <text x="28" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" fill="#f1f5f9">1. Dispatch Trigger</text>
-    <text x="14" y="60" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">• Match finalized</text>
-    <text x="14" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">• Recalculation request</text>
-    <text x="14" y="100" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#94a3b8">• Transactional enqueue</text>
-    <text x="14" y="125" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#38bdf8">INSERT analytics_tasks</text>
-  </g>
-
-  <path d="M 250 185 L 320 185" stroke="#64748b" stroke-width="2" marker-end="url(#ar4)" />
-
-  <!-- Step 2: PostgreSQL Queue Table -->
-  <g transform="translate(320, 100)">
-    <rect width="250" height="170" rx="10" fill="#0f172a" stroke="#fbbf24" stroke-width="2" />
-    <rect x="14" y="14" width="6" height="20" rx="3" fill="url(#amber4)" />
-    <text x="28" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" fill="#fbbf24">2. Postgres Queue Table</text>
-    <text x="14" y="55" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#e2e8f0" font-weight="600">analytics_tasks</text>
-    <text x="14" y="75" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• match_id (UNIQUE)</text>
-    <text x="14" y="93" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• status: PENDING | PROCESSING</text>
-    <text x="14" y="111" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• attempts (max 5)</text>
-    <text x="14" y="129" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• created_at / updated_at</text>
-    <text x="14" y="150" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#fbbf24">• idx_analytics_tasks_status</text>
-  </g>
-
-  <path d="M 570 185 L 640 185" stroke="#34d399" stroke-width="2" marker-end="url(#ar4-emerald)" />
-  <rect x="575" y="155" width="60" height="20" rx="4" fill="#0f172a" stroke="#1e293b" />
-  <text x="605" y="169" font-family="system-ui, -apple-system, sans-serif" font-size="9" font-weight="700" fill="#34d399" text-anchor="middle">CLAIM</text>
-
-  <!-- Step 3: Background Worker Loop -->
-  <g transform="translate(640, 100)">
-    <rect width="240" height="170" rx="10" fill="#0f172a" stroke="#34d399" stroke-width="2" />
-    <rect x="14" y="14" width="6" height="20" rx="3" fill="url(#emerald4)" />
-    <text x="28" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" fill="#34d399">3. Background Worker</text>
-    <text x="14" y="55" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#e2e8f0" font-weight="600">FOR UPDATE SKIP LOCKED</text>
-    <text x="14" y="75" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Non-blocking job claiming</text>
-    <text x="14" y="93" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Horizontal worker scaling</text>
-    <text x="14" y="111" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• No double-processing</text>
-    <text x="14" y="129" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Stale lease reaper (>5m)</text>
-    <text x="14" y="150" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#34d399">• Dedicated health port 8081</text>
-  </g>
-
-  <path d="M 880 185 L 940 185" stroke="#64748b" stroke-width="2" marker-end="url(#ar4)" />
-
-  <!-- Step 4: Metric Calculation -->
-  <g transform="translate(940, 110)">
-    <rect width="170" height="150" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.5" />
-    <text x="14" y="30" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" fill="#f1f5f9">4. Calculation</text>
-    <text x="14" y="55" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• MatchAnalyticsService</text>
-    <text x="14" y="73" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Efficacy &amp; scoring %</text>
-    <text x="14" y="91" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Technique mix</text>
-    <text x="14" y="109" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Tournament rollups</text>
-    <text x="14" y="130" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" fill="#34d399">Save to DB &amp; Ready</text>
-  </g>
-
-  <!-- Lower Section: Client Polling State Machine -->
-  <g transform="translate(50, 310)">
-    <rect width="1060" height="230" rx="12" fill="#1e293b" stroke="#334155" stroke-width="1.5" />
-    <rect x="20" y="16" width="6" height="24" rx="3" fill="url(#blue4)" />
-    <text x="36" y="34" font-family="system-ui, -apple-system, sans-serif" font-size="17" font-weight="700" fill="#f1f5f9">Client-Side Reactive Polling &amp; Consumption State Machine</text>
-    <text x="560" y="34" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#38bdf8">NgRx Effects &amp; Memoized Selectors with Exponential Backoff + Jitter</text>
-
-    <g transform="translate(30, 56)">
-      <rect width="220" height="140" rx="8" fill="#0f172a" stroke="#334155" />
-      <circle cx="24" cy="24" r="6" fill="#fbbf24" />
-      <text x="38" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#fbbf24">STATUS: PENDING</text>
-      <text x="14" y="55" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Match just completed</text>
-      <text x="14" y="73" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Initial 2s poll delay</text>
-      <text x="14" y="91" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• UI shows skeleton state</text>
-      <text x="14" y="115" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#64748b">Polling Interval: 2.0s</text>
-
-      <path d="M 220 70 L 260 70" stroke="#64748b" stroke-width="2" marker-end="url(#ar4)" />
-
-      <g transform="translate(260, 0)">
-        <rect width="220" height="140" rx="8" fill="#0f172a" stroke="#38bdf8" />
-        <circle cx="24" cy="24" r="6" fill="#38bdf8" />
-        <text x="38" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#38bdf8">STATUS: PROCESSING</text>
-        <text x="14" y="55" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Worker currently computing</text>
-        <text x="14" y="73" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Exponential backoff + jitter</text>
-        <text x="14" y="91" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• UI shows generating indicator</text>
-        <text x="14" y="115" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#38bdf8">Interval: 3.5s - 5.0s</text>
-      </g>
-
-      <path d="M 480 70 L 520 70" stroke="#34d399" stroke-width="2" marker-end="url(#ar4-emerald)" />
-
-      <g transform="translate(520, 0)">
-        <rect width="230" height="140" rx="8" fill="#0f172a" stroke="#34d399" />
-        <circle cx="24" cy="24" r="6" fill="#34d399" />
-        <text x="38" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#34d399">STATUS: COMPLETED</text>
-        <text x="14" y="55" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Poller terminates immediately</text>
-        <text x="14" y="73" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• NgRx loads full analytics payload</text>
-        <text x="14" y="91" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Reactive chart rendering</text>
-        <text x="14" y="115" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#34d399">Ready: OnPush render</text>
-      </g>
-
-      <g transform="translate(770, 0)">
-        <rect width="220" height="140" rx="8" fill="#0f172a" stroke="#dc2626" />
-        <circle cx="24" cy="24" r="6" fill="#dc2626" />
-        <text x="38" y="28" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#f87171">ERROR / RETRY</text>
-        <text x="14" y="55" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Max attempts (5) reached</text>
-        <text x="14" y="73" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Bounded fallback UI</text>
-        <text x="14" y="91" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">• Manual retry action offered</text>
-        <text x="14" y="115" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#f87171">Logged to Sentry</text>
-      </g>
-    </g>
-  </g>
+  <g stroke="#64748b" stroke-width="3" fill="none" marker-end="url(#a)"><path d="M245 245 H290"/><path d="M490 245 H535"/><path d="M735 245 H780"/><path d="M980 245 H1020"/></g>
+  <text x="350" y="390" font-family="system-ui,-apple-system,sans-serif" font-size="14" fill="#94a3b8">Tradeoff: task coordination shares PostgreSQL capacity and requires explicit retry/stale-task handling.</text>
 </svg>
