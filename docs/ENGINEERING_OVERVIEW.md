@@ -1,45 +1,48 @@
-# Engineering Overview
+# Engineering overview
 
-## System Mission & Product Scope
+## Product and engineering context
 
-**Jahiz Analytics (جاهز)** is a high-performance, cross-platform sports analytics and tournament management platform built for Olympic and WKF (World Karate Federation) karate. Shipped to production on both the **Apple App Store** and **Google Play Store**, it transforms fast-paced, live match events into structured, longitudinal athletic intelligence.
+Jahiz Analytics is a cross-platform karate performance product for athletes and coaches. The current application centers on player management, live match logging, match review and analytics, individual tournaments, and coach-only team workflows.
 
-In competitive karate, bouts last 2 to 3 minutes of high-intensity action. Scorers and coaches must capture points (Yuko, Waza-ari, Ippon), penalties (Chui 1–3, Hansoku-Chake), warnings, Senshu (first-score advantage), and timer adjustments with split-second precision on handheld mobile devices, frequently under hostile Wi-Fi or cellular conditions inside crowded sports arenas.
+The engineering problem is a combination of **interactive mobile state**, **transactional sports data**, **background analytics**, **role/ownership boundaries**, **bilingual layout**, and **mobile release compatibility**.
 
-The engineering challenge was to design and ship a system that satisfies three uncompromising requirements:
-1. **Zero-Latency Interaction**: The mobile scorer must update instantly (0 ms perceived latency) with absolute touch reliability.
-2. **Strict Server Authority**: The server database remains the single source of truth, enforcing tournament rules, idempotency, and terminal state invariants via transactional database triggers.
-3. **Decoupled Analytical Processing**: Heavy analytics generation must never compete with real-time match event ingestion on the API thread.
+## Stack at a glance
 
----
+| Layer | Technologies | Why it is here |
+| --- | --- | --- |
+| Mobile client | Angular, Ionic, Capacitor, RxJS | Cross-platform mobile delivery and device lifecycle integration |
+| State | NgRx | Explicit actions/effects/selectors for long-lived match workflows |
+| API | Node.js, TypeScript, Express | Domain APIs and server-authoritative policy |
+| Database | PostgreSQL | Relational integrity, transactions, indexes and historical data |
+| Background work | Node.js worker + PostgreSQL task coordination | Keeps heavier analytics work outside the primary HTTP path |
+| Testing | Unit, integration, E2E and release checks | Covers domain behavior, state, persistence and critical journeys |
+| Delivery | CI/CD + mobile store tooling | Staged server/mobile releases and compatibility checks |
+| Observability | Application error monitoring + health/readiness probes | Production diagnosis and release verification |
 
-## Technical Stack at a Glance
+Specific framework versions, commit totals, migration totals and test-file totals are intentionally omitted here because they change over time and are not useful recruiter-facing evidence on their own.
 
-| Layer | Technologies | Architectural Highlights |
-| :--- | :--- | :--- |
-| **Mobile & Client** | Angular 20, Ionic 8, Capacitor 7, NgRx 20, RxJS | Standalone Components, Signals, OnPush change detection, Optimistic reducers, FIFO command queue, True RTL/LTR layout parity, Native Haptics. |
-| **Backend API** | Node.js 22 (ESM), Express, TypeScript | Controller → Service → Repository pattern, Policy-driven authorization, JWT session rotation with concurrency grace periods. |
-| **Database** | PostgreSQL 17, `pg` Connection Pool | 37 SQL migrations, ACID multi-stage transactions via `PoolClient`, Row-level locking (`FOR UPDATE SKIP LOCKED`), Terminal state triggers, Soft deletes. |
-| **Worker Engine** | Node.js Worker Process (`src/worker.ts`) | Decoupled background service, Distributed PostgreSQL queue, Stale lease reaper, Bounded exponential retry backoff, Dedicated health port (8081). |
-| **Testing & Quality** | Vitest, Jasmine, Playwright, k6 | 390 Test files, Bilingual resilience E2E, Visual regression, Accessibility (a11y), Capacity & stress load testing (smoke, spike, soak, breakpoint). |
-| **CI/CD & Delivery** | GitLab CI/CD, DigitalOcean (DOCR), Codemagic, Fastlane | 6-Stage pipeline with automated rollback, Multi-stage Docker runner image, Google Play automated publishing, iOS TestFlight automation. |
-| **Observability** | Sentry (Node, Angular, Capacitor) | Client & server error monitoring, Distributed tracing, Health & readiness probes (`/health`, `/health/ready`, `/health/live`). |
+## Core engineering principles
 
----
+### Server-authoritative state with responsive local interaction
 
-## Core Engineering Principles
+Live scorer actions are reflected locally through NgRx so the operator receives immediate feedback. Mutations are still validated by the backend and reconciled against canonical server state. Idempotency and ordered pending actions reduce the risk of duplicate or out-of-order effects during retries.
 
-### 1. Backend Authoritative Truth, Optimistic Frontend UX
-The client assumes local success for operator commands to maintain fluid interaction on the competition floor, but every mutation is verified and committed by the server. If an event is rejected or fails network validation, the client reconciles gracefully without silent corruption or state desynchronization.
+### Stable live-match layout
 
-### 2. Zero Cumulative Layout Shift (CLS) on Critical Surfaces
-In live scoring, an interface control must never shift position while the operator is tapping. Error banners, connection loss notices, and expanded rule descriptions exist in isolated, explicitly dimensioned layers. Layouts during active clock ticks dropped from 146 to 2 per two seconds, with 0 px movement of primary controls upon network status changes.
+Timer ticks, network state and mutation feedback should not move critical controls unexpectedly. The scorer layout therefore gives explicit ownership to stable regions and overlays transient feedback rather than letting banners restructure the action surface.
 
-### 3. Database Invariants Enforced at the Engine Level
-Business-critical rules are not left solely to application code. PostgreSQL triggers enforce terminal match invariants: once a match is marked `COMPLETED`, all subsequent write operations to its event stream are aborted at the database engine level, guaranteeing tamper-proof historical audits.
+### Transactional domain rules
 
-### 4. Decoupled Asynchronous Processing
-Match logging and analytics calculation operate on independent lifecycles. Real-time scoring routes persist raw events with minimal database overhead. Analytical metric computation, technique efficacy models, and tournament rollups are dispatched asynchronously to a background worker engine via row-locked PostgreSQL queues.
+Important multi-step writes use explicit database transactions. Ownership and capability checks live on the backend, and historical records are preserved where later review/analytics depend on them.
 
-### 5. Verified Release Engineering & Store Delivery
-Code is not considered shipped until it passes end-to-end release gating: isolated database migration verification, static line-level secret scans, strict localization assertions, Docker image validation, and automated deployment pipelines to staging, production, TestFlight, and Google Play.
+### Asynchronous analytics
+
+Analytics generation can be more expensive than recording a match event. Background workers claim queued tasks using PostgreSQL row locking so aggregation can happen independently from the match-writing request path.
+
+### Safe product evolution
+
+Database changes and mobile client releases do not always move together. Release preflight, additive/backward-compatible schema patterns where possible, health/readiness checks and mobile version policy help manage that gap.
+
+## Product boundary
+
+Exports, AI insights, video analysis, coach-athlete invitations, organization/academy accounts and commercial enforcement are not described as shipped capabilities in this showcase. See [Feature claim verification](./FEATURE_CLAIM_VERIFICATION.md).
